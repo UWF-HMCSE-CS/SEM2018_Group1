@@ -1,0 +1,28 @@
+{
+  "name": "lalala",
+  "version": "1.0.0",
+  "description": "Fantasy ESports",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node tests/tests.js"
+  },
+  "author": "Louis LeDuc",
+  "license": "ISC",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "connect": "^3.6.6",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "net": "^1.0.2",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "request": "^2.88.0"
+  }
+}
