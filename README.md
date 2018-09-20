@@ -39,5 +39,18 @@ in order to add the views to this template. this would look something like this:
 <p>You are logged in as {{user}}</p>
 ```
 
+### Installation
+* To install this, (for development), clone or download this to your computer and open a terminal in that folder (for unix based systems -- windows instructions pending)
 
+* Install npm and nodejs
+
+* Type into the terminal: 
+```sh
+npm install
+```
+
+* When it finishes, type this to run:
+```sh
+npm start
+```
 
