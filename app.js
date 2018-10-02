@@ -39,6 +39,8 @@ app.use('/', require(__dirname + '/routes.js'));
 app.use(function (req, res, next) {
 	var err = new Error('Not Found');
 	err.status = 404;
+	if(req.url)
+	err.request = req.url;
 	next(err);
 });
 
@@ -48,9 +50,18 @@ if(app.get('env') === 'development') {
 	app.use(function (err, req, res, next) {
 		console.log(err);
 		res.status(err.status || 500);
+		if(err.request){
+			res.render('error', {
+				message: err.message,
+				error: err,
+				request: err.request,
+				code: err.status || 500
+			})
+		}else
 		res.render('error', {
 			message: err.message,
-			error: err
+			error: err,
+			code: err.status || 500
 		})
 	});
 }
@@ -60,7 +71,8 @@ app.use(function (err, req, res, next) {
 	res.status(err.status || 500);
 	res.render('error', {
 		message: err.message,
-		error: {}
+		error: {},
+		code: err.status || 500
 	});
 });
 
