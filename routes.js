@@ -28,9 +28,9 @@ router.get('/team',function(req,res){
 })
 
 //until fixed
-router.get('/home.html',function(req,res){
+/*router.get('/home.html',function(req,res){
 	res.redirect('/');
-})
+})*/
 router.get('/players.html',function(req,res){
 	res.redirect('/players');
 })
