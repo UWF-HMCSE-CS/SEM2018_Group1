@@ -1,3 +1,4 @@
+
 .text-center {
     text-align: center!important;
 }
@@ -61,10 +62,80 @@ body .text-center{
     margin-bottom: 0px;
 }
 
- /*.font-weight-normal {
+ .font-weight-normal {
    font-weight: 500!important;
-    color: #004C97;
-}*/
+    color: #004C97;}
+
+/*extra*/
+.text-center {
+    text-align: center!important;
+}
+
+.text-center{
+    
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+    background: linear-gradient(to bottom,#fff 50%,#D1DEEC);
+}
+
+body {
+    background: linear-gradient(to bottom,#fff 50%,#D1DEEC);
+    
+}
+
+.text-center {
+    margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: white;
+}
+
+html, body {
+    height: 100%;
+}
+
+.text-center, ::after, ::before {
+    box-sizing: border-box;
+}
+
+.text-center, ::after, ::before {
+    box-sizing: border-box;
+}
+
+body .text-center{
+    display: block;
+    margin: 8px;
+}
+
+.form-signin {
+    
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+    
+    
+}
+
+.form-signin .checkbox {
+    font-weight: 400;
+}
+
+.mb-4, .my-4 {
+    margin-bottom: 1.5rem!important;
+}
+
+.font-weight-normal {
+    font-weight: 400!important;
+}
 
 .btn-primary {
     color: #fff;
@@ -77,6 +148,17 @@ form {
     margin-top: 0em;
 }
 
+nav .navbar-nav {
+    font-size: 1.5rem;
+}
+
+.navbar-inverse {
+    border-radius: 0px;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover {
+    color: rgb(204, 204, 204);
+}
 
 button.btn.btn-lg.btn-primary.btn-block {
     font-family: Arial, Helvetica, sans-serif;
@@ -98,11 +180,138 @@ button.btn.btn-sm.btn-basic.btn-block {
     
 }
 
-.h1, h1 {
-    margin-top: 0px;
-    font-size:41px;
-    font-weight: 600;
-    color: #004C97
+
+.navbar-inverse {
+    background-color: #004C97;
+   
+}
+
+.navbar-inverse .navbar-brand {
+    color: #ffffff;
+}
+
+
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+    color: #ffffff;
+    background-color: #004C97;
+    font-size: 16px;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #ffffff;
+}
+
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.dropbtn:hover {
+    color: white;
+}
+
+.table thead{
+    background-color: rgb(202, 202, 202);
+}
+
+.navbar-brand {
+    align-items: center;
+    display: flex;
+    font-size: 25px;
+
+}
+
+.navbar-brand>img {
+     display: inline; 
+     margin-right: 10px;
     
 }
+
+.table {
+    width: 50%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    
+}
+
+.list-group {
+    width: 50%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+   font-size: 16px;
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size:18px;
+  color: black;
+}
+
+.list-group-item:first-child:hover {
+    background-color: transparent;
+    color: black;
+}
+.navbar {
+    position: relative;
+    min-height: 50px;
+    margin-bottom: 0px;
+    border: 1px solid transparent;
+}
+
+.h3, h3 {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.table thead {
+    background-color: white;
+}
+
+td:hover {
+    background-color: rgb(219, 219, 219);
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #004C97;
+    border-color: #004C97;
+    
+}
+
+#button1 td:hover {
+    background-color:white;
+    
+}
+
+.table-hover>tbody>tr:hover {
+    background-color: #ffffff; 
+}
+
+
+#button1  {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.list-group-item:last-child:hover {
+    background-color: transparent;
+}
+
+
+
+
 
