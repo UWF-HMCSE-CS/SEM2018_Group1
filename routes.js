@@ -28,7 +28,7 @@ router.get('/team',function(req,res){
 })
 
 //until fixed
-router.get('/index.html',function(req,res){
+router.get('/home.html',function(req,res){
 	res.redirect('/');
 })
 router.get('/players.html',function(req,res){
@@ -39,6 +39,9 @@ router.get('/team.html',function(req,res){
 })
 router.get('/login.html',function(req,res){
 	res.redirect('/login');
+})
+router.get('/league.html',function(req,res){
+	res.redirect('/league');
 })
 
 router.get('/',function(req,res){
