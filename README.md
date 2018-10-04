@@ -4,7 +4,13 @@
 
 ### About
 This application is a project at UWF for a software engineering management class. This project's goal is to create a "fantasy football for esports." All development will be committed to this repository during the duration of the project. 
-
+### Git Organization
+For this project there is a specific flow in place for development. 
+ * master: Release Candidate -- sprint releases
+ * stable: Code that is stable, possible to release from, tested code
+ * development: Code that needs integration testing, code that doesn't crash on its own
+ * feature/<featurename>: Branch used if members need to work together on a feature?... perhaps this is like a topical developer branch
+ * developer/<membername>: Member Specific Feature Branch -- personal work branch.
 ### Locations
 #### public
 This is our folder for "static routes" which would include any client side javascript or css files
