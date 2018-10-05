@@ -348,3 +348,13 @@ a:hover {
     height: 40px;
     
 }
+
+#b1 {
+    background-color: rgb(173, 173, 173);
+    border-color: rgb(173, 173, 173);
+    width:100%;
+    margin-top:5px;
+    font-size:14px;
+    color: black;
+    
+}
