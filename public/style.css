@@ -143,10 +143,7 @@ body .text-center{
     border-color: #004C97;
 }
 
-form {
-    display: block;
-    margin-top: 0em;
-}
+
 
 
 
@@ -331,13 +328,6 @@ a:hover {
     text-align: center;
 }
 
-#signUpForm {
-    margin-top: 30px;
-    margin-left: 80%;
-    margin-right:50%;
-    width: 70%;
-}
-
 #signUpButton {
     font-size: 16px;
     margin-top: 10px;
@@ -358,3 +348,51 @@ a:hover {
     color: black;
     
 }
+
+.mx-auto col-sm-8 col-md-5 hide-sm{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+
+}
+
+/*Carousel stuffs*/
+#carousel {
+
+    margin-top: 0px;
+
+}
+
+.carousel {
+    height: 500px;
+    margin-bottom: 60px;
+}
+
+.carousel-caption {
+    z-index: 10;
+}
+
+.carousel .item {
+    width: 100%;
+    height: 500px;
+    background-color: #777;
+}
+.carousel-inner > .item > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 500px;
+}
+
+@media (min-width: 768px) {
+    .carousel-caption p {
+            margin-bottom: 20px;
+            font-size: 21px;
+            line-height: 1.4;
+    }
+}
+
+/*End carousel stuffs*/
