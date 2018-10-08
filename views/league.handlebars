@@ -1,35 +1,38 @@
-<nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navCollapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand">
-                        <img id="brand-image" src="invertedLogo.png" width="40" height="40">eSports Fantasy
-                </a>
-            </div>
-            <div class="collapse navbar-collapse" id="navCollapse">
-            <ul class="nav navbar-nav">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="#">League</a></li>
-                <li><a href="team.html">Team</a></li>
-                <li><a href="players.html">Players</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
-            </ul>
-        </div>
-        </div>
-    </nav>
-
-          <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">
-              My Fantasy Leagues
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">League 1</a>
-            <a href="#" class="list-group-item list-group-item-action">League 2</a>
-            <a href="#" class="list-group-item list-group-item-action">League 3</a>
-            <li class="list-group-item list-group-item-action" id="button1"><button type="button" class="btn btn-primary">Join/Create League</button></a>
+<nav class="navbar navbar-expand-lg ">
+        <a class="navbar-brand" href="#">
+            <img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            eSports Fantasy
+          </a>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="home.html">Home</a>
+            <a class="nav-item nav-link" href="#">League</a>
+            <a class="nav-item nav-link" href="team.html">Team</a>
+            <a class="nav-item nav-link" href="players.html">Players</a>
+            
           </div>
+          <a class="nav navbar-nav navbar-right">
+            <a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
+        </a>
+        </div>
+      </nav>
+        <div class="entire-panel">
+          <div class="card"id="card1">
+            <h5 class="card-header">My Fantasy Leagues</h5>
+            <div class="card-body">
+                <a href="#" class="list-group-item list-group-item-action">League 1</a>
+                <a href="#" class="list-group-item list-group-item-action">League 2</a>
+                <a href="#" class="list-group-item list-group-item-action">League 3</a>
+              <a href="#" class="btn btn-primary" id="joinButton">Join/Create League</a>
+              
+            </div>
+          </div>
+          <div class="card">
+            <h5 class="card-header">League Description</h5>
+            <div class="card-body">
+              <p class="card-text">Blah blah blah</p>
+              <a href="#" class="btn btn-primary" id="inviteButton">Invite Players</a>
+              
+            </div>
+          </div>
+        </div>
