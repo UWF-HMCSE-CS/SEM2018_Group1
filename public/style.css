@@ -144,11 +144,6 @@ body .text-center{
 }
 
 
-
-
-
-
-
 button.btn.btn-lg.btn-primary.btn-block {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #004C97;
@@ -179,9 +174,7 @@ a {
     color: white;
 }
 
-.table thead{
-    background-color: rgb(202, 202, 202);
-}
+
 
 .navbar-brand {
     align-items: center;
@@ -196,28 +189,12 @@ a {
     
 }
 
-.table {
-    width: 50%;
-    max-width: 100%;
-    margin-bottom: 20px;
-    
-}
-
 a {
     color: #ffffff;
     text-decoration: none;
     float:right;
     padding-top:5px;
 }
-tbody {
-    display: table-row-group;
-    vertical-align: middle;
-    border-color: inherit;
-   font-size: 16px;
-}
-
-
-
 
 .navbar {
     position: relative;
@@ -238,14 +215,6 @@ tbody {
     font-size: 22px;
     font-weight: bold;
     text-align: left;
-}
-
-.table thead {
-    background-color: white;
-}
-
-td:hover {
-    background-color: rgb(219, 219, 219);
 }
 
 .btn-primary {
@@ -304,7 +273,6 @@ text-align: center;
     align-items: center;
     justify-content: center;
     display:flex;
-    width: 20%;
     margin-left: 40%;
     margin-right: 40%
 }
@@ -314,7 +282,6 @@ text-align: center;
     align-items: center;
     justify-content: center;
     display:flex;
-    width: 20%;
     margin-left: 40%;
     margin-right: 40%
 }
@@ -396,3 +363,7 @@ a:hover {
 }
 
 /*End carousel stuffs*/
+
+#teamName {
+    text-align:center;
+}
