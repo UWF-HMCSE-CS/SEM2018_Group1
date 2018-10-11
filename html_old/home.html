@@ -1,4 +1,20 @@
-<nav class="navbar navbar-expand-lg ">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <link rel="shortcut icon" href="appLogo.PNG" /><title>eSports Fantasy</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css"rel="stylesheet">
+    
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg ">
         <a class="navbar-brand" href="#">
             <img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
             eSports Fantasy
@@ -12,12 +28,12 @@
             
           </div>
           <a class="nav navbar-nav navbar-right">
-            <a href="#">Logged in as: {{user.username}} <span class="glyphicon glyphicon-log-out"></span> Log out</a>
+            <a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
         </a>
         </div>
       </nav>
 
-<!-- Ideas: Carousel,News, Activity, Account Settings? -->
+<!-- Ideas: News, Activity, Account Settings? -->
       
       <div id="carousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -43,7 +59,17 @@
             <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
     </div>
+      
+      
+      
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 
     <script>
       $("#carousel").carousel();
   </script>
+  </body>
+</html>
