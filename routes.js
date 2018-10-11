@@ -4,8 +4,9 @@ let request = require("request");
 let dbcon = require(__dirname + '/lib/mysqlDBMgr.js');
 
 router.get('/login', function(req,res){
+	console.log(req.user);
 	res.render('login',{
-		
+		user: req.user
 	});
 });
 router.post('/login', function(req,res){
@@ -16,14 +17,38 @@ router.post('/login', function(req,res){
 		console.log("LOGIN ROUTE");
 		//req.body.username
 		//req.body.password
+		console.log(passport);
+		console.log(passport._strategies.local._verify(req.body.username, req.body.password, function(item1,item2){
 
-
-
-
-
-
-
-		res.redirect('/');
+		}));
+		let authFunction = function(err, user, info) {
+			console.log(err);
+			console.log(user);
+			console.log(info);
+        	if (err) { console.log(err);return next(err); }
+        	if (!user) {
+            	console.log("Sorry credentials don't match");
+        	    //badCreds = 1;
+        	    return res.redirect('/login');
+        	} else {
+            	req.login(user, function(err) {
+            	    if (err) { return next(err); }
+            	    //badCreds = 0;
+            	    //currentUserID = user.id;
+            	    return res.redirect('/');
+            	});
+        	}
+    	}
+    	authFunction(null,{
+    		username: 'CES_the_reaper',
+    		password: 'smasm1sn3ila'
+    	})
+		passport.authenticate('local', authFunction)
+    	/*passport.authenticate('local',{
+    		successRedirect: '/',
+            failureRedirect: '/login'
+        });*/
+		//res.redirect('/');
 	}
 	else if (req.body.action == 'register'){
 		console.log("REGISTER ROUTE");
@@ -31,7 +56,7 @@ router.post('/login', function(req,res){
 		formPassword = req.body.password;
 		res.redirect('/join');
 	}
-	else res.redirect('/');
+	else res.redirect('/login');
 });
 
 router.get('/join', function(req,res){
@@ -45,8 +70,15 @@ router.post('/join', function(req,res){
 	let username = req.body['user[login]'];
 	let email = req.body['user[email]'];
 	let password = req.body['user[password]'];
-
-	res.redirect('/login');
+	dbcon.query('insert into login values(?,AES_ENCRYPT(?,?));',[username, password, require(__dirname + '/credentials.js').loginKey],function(err,rows,cols){
+		if(!err)
+			res.redirect('/login');
+		else{
+			res.render('/join', {
+				error: "Username is possibly already in use."
+			});
+		}
+	});
 })
 router.get('/league',function(req,res){
 	res.render('league',{});
@@ -76,7 +108,14 @@ router.get('/league.html',function(req,res){
 })
 
 router.get('/',function(req,res){
-	res.render('home',{});
+	console.log(req.User);
+	var user = {
+		username: req.user.username
+	}
+	//console.log(req);
+	res.render('home',{
+		user: user
+	});
 })
 
 
