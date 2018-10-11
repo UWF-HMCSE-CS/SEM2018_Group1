@@ -143,14 +143,6 @@ body .text-center{
     border-color: #004C97;
 }
 
-form {
-    display: block;
-    margin-top: 0em;
-}
-
-
-
-
 
 button.btn.btn-lg.btn-primary.btn-block {
     font-family: Arial, Helvetica, sans-serif;
@@ -182,9 +174,7 @@ a {
     color: white;
 }
 
-.table thead{
-    background-color: rgb(202, 202, 202);
-}
+
 
 .navbar-brand {
     align-items: center;
@@ -199,28 +189,12 @@ a {
     
 }
 
-.table {
-    width: 50%;
-    max-width: 100%;
-    margin-bottom: 20px;
-    
-}
-
 a {
     color: #ffffff;
     text-decoration: none;
     float:right;
     padding-top:5px;
 }
-tbody {
-    display: table-row-group;
-    vertical-align: middle;
-    border-color: inherit;
-   font-size: 16px;
-}
-
-
-
 
 .navbar {
     position: relative;
@@ -241,14 +215,6 @@ tbody {
     font-size: 22px;
     font-weight: bold;
     text-align: left;
-}
-
-.table thead {
-    background-color: white;
-}
-
-td:hover {
-    background-color: rgb(219, 219, 219);
 }
 
 .btn-primary {
@@ -307,7 +273,6 @@ text-align: center;
     align-items: center;
     justify-content: center;
     display:flex;
-    width: 20%;
     margin-left: 40%;
     margin-right: 40%
 }
@@ -317,7 +282,6 @@ text-align: center;
     align-items: center;
     justify-content: center;
     display:flex;
-    width: 20%;
     margin-left: 40%;
     margin-right: 40%
 }
@@ -329,13 +293,6 @@ a:hover {
 
 .card-text {
     text-align: center;
-}
-
-#signUpForm {
-    margin-top: 30px;
-    margin-left: 80%;
-    margin-right:50%;
-    width: 70%;
 }
 
 #signUpButton {
@@ -357,4 +314,56 @@ a:hover {
     font-size:14px;
     color: black;
     
+}
+
+.mx-auto col-sm-8 col-md-5 hide-sm{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+
+}
+
+/*Carousel stuffs*/
+#carousel {
+
+    margin-top: 0px;
+
+}
+
+.carousel {
+    height: 500px;
+    margin-bottom: 60px;
+}
+
+.carousel-caption {
+    z-index: 10;
+}
+
+.carousel .item {
+    width: 100%;
+    height: 500px;
+    background-color: #777;
+}
+.carousel-inner > .item > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 500px;
+}
+
+@media (min-width: 768px) {
+    .carousel-caption p {
+            margin-bottom: 20px;
+            font-size: 21px;
+            line-height: 1.4;
+    }
+}
+
+/*End carousel stuffs*/
+
+#teamName {
+    text-align:center;
 }
