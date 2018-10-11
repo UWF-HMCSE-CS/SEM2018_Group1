@@ -1,22 +1,53 @@
-var passport = require('passport');
-var router = require('express').Router();
-var request = require("request");
+let passport = require('passport');
+let router = require('express').Router();
+let request = require("request");
+let dbcon = require(__dirname + '/lib/mysqlDBMgr.js');
 
 router.get('/login', function(req,res){
-	res.render('login',{});
+	res.render('login',{
+		
+	});
 });
 router.post('/login', function(req,res){
 	console.log(req.body);
-	if(req.body.login){
+	console.log(req.body.action);
+	console.log(req.body.action);
+	if(req.body.action == 'login'){
 		console.log("LOGIN ROUTE");
+		//req.body.username
+		//req.body.password
+
+
+
+
+
+
+
 		res.redirect('/');
 	}
-	else if (req.body.register){
+	else if (req.body.action == 'register'){
 		console.log("REGISTER ROUTE");
-		res.redirect('/register');
+		formUsername = req.body.username;
+		formPassword = req.body.password;
+		res.redirect('/join');
 	}
 	else res.redirect('/');
 });
+
+router.get('/join', function(req,res){
+	res.render('signUp', {
+		
+	});
+});
+router.post('/join', function(req,res){
+	console.log(req.body);
+	console.log('Username: ' + req.body['user[login]']);
+	let username = req.body['user[login]'];
+	let email = req.body['user[email]'];
+	let password = req.body['user[password]'];
+
+	res.redirect('/login');
+})
 router.get('/league',function(req,res){
 	res.render('league',{});
 })
