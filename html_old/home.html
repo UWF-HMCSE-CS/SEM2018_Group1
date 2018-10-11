@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="style.css"rel="stylesheet">
+    
   </head>
   <body>
     <nav class="navbar navbar-expand-lg ">
@@ -32,9 +33,43 @@
         </div>
       </nav>
 
+<!-- Ideas: News, Activity, Account Settings? -->
+      
+      <div id="carousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carousel" data-slide-to="0"></li>
+            <li data-target="#carousel" data-slide-to="1"></li>
+            <li data-target="#carousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="item active">
+                <img src="ow1.jpg" alt="Slide 1">
+            </div>
+            <div class="item">
+                <img src="ow2.jpg" alt="Slide 2">
+            </div>
+            <div class="item">
+                <img src="ow3.jpg" alt="Slide 3">
+            </div>
+        </div>
+        <a href="#carousel" class="left carousel-control" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a href="#carousel" class="right carousel-control" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+      
+      
+      
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script>
+      $("#carousel").carousel();
+  </script>
   </body>
 </html>
