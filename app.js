@@ -43,11 +43,6 @@ let test = function (username, password, done) {
         });
 }
 
-test('CES_the_reaper','smasm1sn3ila',function(test1,test2){
-	console.log(test1);
-	console.log(test2);
-})
-
 
 /* define local strategy for login here when db protocol known*/
 passport.use(new LocalStrategy(test));
