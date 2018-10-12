@@ -3,10 +3,15 @@ let router = require('express').Router();
 let request = require("request");
 let dbcon = require(__dirname + '/lib/mysqlDBMgr.js');
 
+
+router.get('/logout', function(req,res){
+	req.logout();
+	res.redirect('/');
+})
 router.get('/login', function(req,res){
 	console.log(req.user);
 	res.render('login',{
-		user: req.user
+		username: (req.user && req.user.username) ? req.user.username : null
 	});
 });
 router.post('/login', function(req,res){
@@ -110,11 +115,11 @@ router.get('/league.html',function(req,res){
 router.get('/',function(req,res){
 	console.log(req.User);
 	var user = {
-		username: req.user.username
+		username: (req.user && req.user.username) ? req.user.username : null
 	}
 	//console.log(req);
 	res.render('home',{
-		user: user
+		username: user.username
 	});
 })
 
