@@ -1,38 +1,28 @@
-<nav class="navbar navbar-expand-lg ">
-        <a class="navbar-brand" href="#">
-            <img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            eSports Fantasy
-          </a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-item nav-link" href="home.html">Home</a>
-            <a class="nav-item nav-link" href="#">League</a>
-            <a class="nav-item nav-link" href="team.html">Team</a>
-            <a class="nav-item nav-link" href="players.html">Players</a>
-            
-          </div>
-          <a class="nav navbar-nav navbar-right">
-            <a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
-        </a>
-        </div>
-      </nav>
-        <div class="entire-panel">
-          <div class="card"id="card1">
-            <h5 class="card-header">My Fantasy Leagues</h5>
-            <div class="card-body">
-                <a href="#" class="list-group-item list-group-item-action">League 1</a>
-                <a href="#" class="list-group-item list-group-item-action">League 2</a>
-                <a href="#" class="list-group-item list-group-item-action">League 3</a>
-              <a href="#" class="btn btn-primary" id="joinButton">Join/Create League</a>
-              
-            </div>
-          </div>
-          <div class="card">
-            <h5 class="card-header">League Description</h5>
-            <div class="card-body">
-              <p class="card-text">Blah blah blah</p>
-              <a href="#" class="btn btn-primary" id="inviteButton">Invite Players</a>
-              
-            </div>
-          </div>
-        </div>
+<table class="table">
+  <thead id="teamName">
+    <h1>League Name</h1>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Team Name</th>
+      <th scope="col">Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Team 1</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Team 2</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Team 3</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table>
+<a href="invite.html" class="btn btn-primary" id="inviteButton">Invite a Friend</a>
