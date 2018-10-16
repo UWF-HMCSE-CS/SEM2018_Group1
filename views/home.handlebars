@@ -1,24 +1,34 @@
-<nav class="navbar navbar-expand-lg ">
-        <a class="navbar-brand" href="#">
-            <img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            eSports Fantasy
-          </a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-item nav-link" href="#">Home</a>
-            <a class="nav-item nav-link" href="league.html">League</a>
-            <a class="nav-item nav-link" href="team.html">Team</a>
-            <a class="nav-item nav-link" href="players.html">Players</a>
-            
-          </div>
-          <a class="nav navbar-nav navbar-right">
-            <a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
-        </a>
-        </div>
-      </nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#"><img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                    eSports Fantasy</a>
+                   
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                 <!-- <span class="navbar-toggler-icon" ></span>-->
+                 <span class="navbar-toggler-icon" ></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                  <ul class="navbar-nav">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="league.html">League</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="team.html">Team</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="players.html">Players</a>
+                    </li>
+                  </ul>
+                  
+                </div>
+                <a class="nav navbar-nav navbar-right">
+                        <a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
+                    </a>
+              </nav>
 
-<!-- Ideas: Carousel,News, Activity, Account Settings? -->
-      
+<!-- Ideas: News, Activity, Account Settings? -->
       <div id="carousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carousel" data-slide-to="0"></li>
@@ -43,6 +53,14 @@
             <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
     </div>
+      
+      
+      
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 
     <script>
       $("#carousel").carousel();
