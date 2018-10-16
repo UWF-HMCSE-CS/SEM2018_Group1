@@ -94,14 +94,33 @@ router.post('/join', function (req, res) {
     let email = req.body['user[email]'];
     let password = req.body['user[password]'];
     dbcon.query('insert into login values(?,AES_ENCRYPT(?,?));', [username, password, require(__dirname + '/credentials.js').loginKey], function (err, rows, cols) {
-        if (!err)
+        if (!err) {
+            dbcon.query('insert into user values(?,?);', [username, email], function (err2, rows, cols) {
+                if (err2) {
+                    next(err2);
+                }
+            });
             res.redirect('/login');
-        else {
+        }else {
             res.render('signUp', {
                 error: "Username is possibly already in use."
             });
         }
     });
+});
+router.get('/set/email/:emailaddress',function(req,res){
+    if(req.user) {
+        dbcon.query('insert into user values(?,?);', [req.user.username, req.params.emailaddress], function (err2, rows, cols) {
+            if (err2) {
+                next(err2);
+            }
+        });
+    }else {
+        next({
+            message: "User not logged in, route inaccessible"
+        });
+    }
+    res.redirect('/');
 });
 router.get('/league', function (req, res) {
     let user = {
