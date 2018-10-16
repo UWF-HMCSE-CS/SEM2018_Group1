@@ -51,8 +51,8 @@ router.post('/login', function(req,res){
         	}
     	}
     	authFunction(null,{
-    		username: 'CES_the_reaper',
-    		password: 'smasm1sn3ila'
+    		username: req.body.username,
+    		password: req.body.password
     	})
 		passport.authenticate('local', authFunction)
     	/*passport.authenticate('local',{
@@ -94,7 +94,7 @@ router.post('/join', function(req,res){
 		if(!err)
 			res.redirect('/login');
 		else{
-			res.render('/join', {
+			res.render('signUp', {
 				error: "Username is possibly already in use."
 			});
 		}
