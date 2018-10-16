@@ -1,6 +1,6 @@
 <body class="text-center">
 <form class="form-signin" method="post" action="/login">
-  <img class="mb-4" src="appLogo.png" alt="" width="250" height="245">
+  <img class="mb-4" src="/appLogo.png" alt="" width="250" height="245">
   <h1 class="h1 mb-3 font-weight-normal">eSports Fantasy</h1><br>
   <label for="inputUsername" class="sr-only">Username</label>
   <input type="text" id="inputUsername" class="form-control" placeholder="Username" autofocus="" name="username">
@@ -11,7 +11,7 @@
       <input type="checkbox" value="remember-me" name="rememberme"> Remember me
     </label><br><br>
   </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit" name="action" value="login">Log In</button>
+  <button class="btn btn-lg btn-primary btn-block" type="submit" name="action" {{#if next}}value="login-{{next}}"{{else}}value="login"{{/if}}>Log In</button>
   <button href="/join" class="btn btn-sm btn-basic btn-block" type="submit" name="action" value="register" formaction="/login" formmethod="post">Sign Up</button>
 
 </form>

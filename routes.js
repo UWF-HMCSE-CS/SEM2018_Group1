@@ -10,6 +10,8 @@ router.get('/logout', function(req,res){
 })
 router.get('/login', function(req,res){
 	console.log(req.user);
+	if(req.user) res.redirect('/');
+	else
 	res.render('login',{
 		username: (req.user && req.user.username) ? req.user.username : null
 	});
@@ -18,7 +20,11 @@ router.post('/login', function(req,res){
 	console.log(req.body);
 	console.log(req.body.action);
 	console.log(req.body.action);
-	if(req.body.action == 'login'){
+	var successRoute = '/';
+	if(req.body.action.startsWith('login')){
+		if(req.body.action != 'login') successRoute = '/' + req.body.action.substr(6)
+	}
+	if(req.body.action.startsWith('login')){
 		console.log("LOGIN ROUTE");
 		//req.body.username
 		//req.body.password
@@ -40,7 +46,7 @@ router.post('/login', function(req,res){
             	    if (err) { return next(err); }
             	    //badCreds = 0;
             	    //currentUserID = user.id;
-            	    return res.redirect('/');
+            	    return res.redirect(successRoute);
             	});
         	}
     	}
@@ -63,8 +69,17 @@ router.post('/login', function(req,res){
 	}
 	else res.redirect('/login');
 });
+router.get('/login/:next', function(req,res){
+	console.log(req.user);
+	res.render('login',{
+		username: (req.user && req.user.username) ? req.user.username : null,
+		next: req.params.next
+	});
+});
 
 router.get('/join', function(req,res){
+	if(req.user) res.redirect('/');
+	else
 	res.render('signUp', {
 		
 	});
