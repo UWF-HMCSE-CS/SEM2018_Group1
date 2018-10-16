@@ -50,10 +50,10 @@ router.post('/login', function(req,res){
             	});
         	}
     	}
-    	authFunction(null,{
+    	/*authFunction(null,{
     		username: 'CES_the_reaper',
     		password: 'smasm1sn3ila'
-    	})
+    	})*/
 		passport.authenticate('local', authFunction)
     	/*passport.authenticate('local',{
     		successRedirect: '/',
