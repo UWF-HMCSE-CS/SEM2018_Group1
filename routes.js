@@ -110,7 +110,7 @@ router.post('/join', function (req, res) {
 });
 router.get('/set/email/:emailaddress',function(req,res){
     if(req.user) {
-        dbcon.query('insert into user values(?,?);', [req.user.username, req.params.emailaddress], function (err2, rows, cols) {
+        dbcon.query('insert into user values(?,?) on duplicate key update email = ?;', [req.user.username, req.params.emailaddress, req.params.emailaddress], function (err2, rows, cols) {
             if (err2) {
                 next(err2);
             }
@@ -130,6 +130,9 @@ router.get('/league', function (req, res) {
     res.render('league', {
         username: user.username
     });
+});
+router.get('/league/add', function(req,res){
+    res.redirect('/league');
 });
 router.get('/players', function (req, res) {
     let user = {
