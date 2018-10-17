@@ -5,10 +5,10 @@
           </a>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-item nav-link" href="/home">Home</a>
-            <a class="nav-item nav-link" href="/league">League</a>
-            <a class="nav-item nav-link" href="/team">Team</a>
-            <a class="nav-item nav-link" href="#">Players</a>
+              <a class="nav-item nav-link" href="/">Home</a>
+              <a class="nav-item nav-link" {{#if username}}href="/league"{{else}}href="/login/league"{{/if}}>League</a>
+              <a class="nav-item nav-link" {{#if username}}href="/team"{{else}}href="/login/team"{{/if}}>Team</a>
+              <a class="nav-item nav-link" {{#if username}}href="#"{{else}}href="/login/players"{{/if}}>Players</a>
             
           </div>
           <a class="nav navbar-nav navbar-right">
