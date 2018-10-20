@@ -64,9 +64,14 @@ try{
 }try{
     dbcon.query('delete from login where username = ?', ['TestUsername'], function(err,rows,cols){
         if(err){
-            console.error('failure to delete testuser -- check if testuser was created in above statement');
+            console.error('failure to delete testuser from login -- check if testuser was created in above statement');
             throw err;
         }
+        dbcon.query('delete from user where username = ?', ['TestUsername'], function(err,rows,cols){
+            if(err){
+                console.err('failure to delete testuser from user -- check if testuser was created in above statement');
+            }
+        })
     })
 }catch(e){
     console.error(e);
