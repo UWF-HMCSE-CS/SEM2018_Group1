@@ -15,7 +15,7 @@ try{
     let username = "TestUsername";
     let email = "testEmail@testdomain.com";
     let password = "testPassword";
-    dbcon.query('insert into login values(?,AES_ENCRYPT(?,?));', [username, password, require(__dirname + '/credentials.js').loginKey], function (err, rows, cols) {
+    dbcon.query('insert into login values(?,AES_ENCRYPT(?,?));', [username, password, require('../credentials.js').loginKey], function (err, rows, cols) {
         if (!err) {
             dbcon.query('insert into user values(?,?);', [username, email], function (err2, rows, cols) {
                 if (err2) {
