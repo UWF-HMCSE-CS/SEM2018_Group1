@@ -17,13 +17,15 @@ let test1 = function(next){
         dbcon.query('select * from user;', function (err, rows, cols) {
             //console.log("error is: " + err);
             if (err) throw err;
+            next(test3);
         });
     }catch(e){
         console.error(e);
         numberOfErrors ++;
+        next(test3);
     }finally{
         dbLocked = false;
-        next(test3);
+
     }
 };
 let test2 = function(next) {
@@ -41,6 +43,7 @@ let test2 = function(next) {
                         console.error(err2);
                         throw err2;
                     }
+                    next(test4);
                 });
 
             } else {
@@ -52,9 +55,10 @@ let test2 = function(next) {
     } catch (e) {
         console.error(e);
         numberOfErrors++;
+        next(test4);
     } finally {
         dbLocked = false;
-        next(test4);
+
     }
 };
 let test3 = function(next) {
@@ -85,22 +89,25 @@ let test4 = function(next) {
         dbcon.query('select * from login where username = ? and password = AES_Encrypt(?,?);', [username, password, require('../credentials.js').loginKey], function (err, rows, cols) {
             console.log(rows);
             if (!err && rows && rows[0]) {
-
+                next(finale);
             } else if (!err) {
                 console.error('Login system fails at attempt to log in.');
                 numberOfErrors++;
+                next(finale);
             }
             if (err) throw err;
         });
     } catch (e) {
         console.error(e);
         numberOfErrors++;
+        next(finale);
     } finally {
         dbLocked = false;
-        next(finale());
+
+
     }
 };
-let test5 = function() {
+let test5 = function(next) {
     try {
         while (dbLocked) ;
         dbLocked = true;
@@ -112,15 +119,18 @@ let test5 = function() {
             dbcon.query('delete from login where username = ?', ['TestUsername'], function (err, rows, cols) {
                 if (err) {
                     console.err('failure to delete testuser from login -- check if testuser was created in above statement');
+                    throw err;
                 }
+                next();
             })
         })
     } catch (e) {
         console.error(e);
         numberOfErrors++;
+        next();
     } finally {
         dbLocked = false;
-        finale();
+
     }
 };
 
