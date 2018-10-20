@@ -62,7 +62,7 @@ try{
     console.error(e);
     numberOfErrors++;
 }try{
-    dbcon.query('delete from login where username = ? and email = ?;', ['TestUsername','testEmail@testdomain.com'], function(err,rows,cols){
+    dbcon.query('delete from login where username = ?', ['TestUsername'], function(err,rows,cols){
         if(err){
             console.error('failure to delete testuser -- check if testuser was created in above statement');
             throw err;
