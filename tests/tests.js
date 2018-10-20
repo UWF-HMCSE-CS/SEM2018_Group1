@@ -13,7 +13,7 @@ let test1 = function(next){
         while(dbLocked);
         dbLocked = true;
         dbcon.query('select * from user;', function (err, rows, cols) {
-            console.log("error is: " + err);
+            //console.log("error is: " + err);
             if (err) throw err;
         });
     }catch(e){
@@ -102,14 +102,14 @@ let test5 = function() {
     try {
         while (dbLocked) ;
         dbLocked = true;
-        dbcon.query('delete from login where username = ?', ['TestUsername'], function (err, rows, cols) {
+        dbcon.query('delete from user where username = ?', ['TestUsername'], function (err, rows, cols) {
             if (err) {
-                console.error('failure to delete testuser from login -- check if testuser was created in above statement');
+                console.error('failure to delete testuser from user -- check if testuser was created in above statement');
                 throw err;
             }
-            dbcon.query('delete from user where username = ?', ['TestUsername'], function (err, rows, cols) {
+            dbcon.query('delete from login where username = ?', ['TestUsername'], function (err, rows, cols) {
                 if (err) {
-                    console.err('failure to delete testuser from user -- check if testuser was created in above statement');
+                    console.err('failure to delete testuser from login -- check if testuser was created in above statement');
                 }
             })
         })
