@@ -4,7 +4,9 @@ let assert = require('assert');
 var numberOfErrors = 0;
 var dbLocked = false;
 let waitOnDB = function(callback, next){
+    console.log('entering wait function');
     while (true){
+        console.log('tag');
         if(!dbLocked) return callback(next);
     }
 };
@@ -21,7 +23,7 @@ let test1 = function(next){
         numberOfErrors ++;
     }finally{
         dbLocked = false;
-        waitOnDB(next,test3);
+        next(test3);
     }
 };
 let test2 = function(next) {
@@ -52,7 +54,7 @@ let test2 = function(next) {
         numberOfErrors++;
     } finally {
         dbLocked = false;
-        waitOnDB(next,test4);
+        next(test4);
     }
 };
 let test3 = function(next) {
@@ -71,7 +73,7 @@ let test3 = function(next) {
         numberOfErrors++;
     } finally {
         dbLocked = false;
-        waitOnDB(next,test5);
+        next(test5);
     }
 };
 let test4 = function(next) {
@@ -95,7 +97,7 @@ let test4 = function(next) {
         numberOfErrors++;
     } finally {
         dbLocked = false;
-        waitOnDB(next,finale);
+        next(finale());
     }
 };
 let test5 = function() {
@@ -118,6 +120,7 @@ let test5 = function() {
         numberOfErrors++;
     } finally {
         dbLocked = false;
+        finale();
     }
 };
 
@@ -134,4 +137,5 @@ try{
 let finale = function() {
     assert(numberOfErrors === 0, "You have " + numberOfErrors + " happening in this application's test script, please fix them before moving these to release!");
 };
-waitOnDB(test1,test2);
+//waitOnDB(test1,test2);
+test1(test2);
