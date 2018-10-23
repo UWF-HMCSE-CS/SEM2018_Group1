@@ -12,7 +12,7 @@ router.get('/login', function (req, res) {
     console.log(req.user);
     if (req.user) res.redirect('/');
     else
-        res.render('login', {
+        res.render('login', {layout:false,
             username: (req.user && req.user.username) ? req.user.username : null
         });
 });
