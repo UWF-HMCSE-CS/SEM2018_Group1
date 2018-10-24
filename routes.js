@@ -85,7 +85,7 @@ router.get('/login/:next', function (req, res) {
 router.get('/join', function (req, res) {
     if (req.user) res.redirect('/');
     else
-        res.render('signUp', {});
+        res.render('signUp', {layout:false});
 });
 router.post('/join', function (req, res) {
     console.log(req.body);
