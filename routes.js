@@ -158,13 +158,36 @@ router.get('/createleague', function (req, res) {
     for(let x = 1; x <= 20; x++) {
         nums1to20.push(x);
     }
-    res.render('createleague', {nums1to20});
+    res.render('createleague', {nums1to20, username: req.user.username});
 });
 
 router.post('/createleague', function (req, res) {
-    //console.log(req.body);
     //create new league using leagueName, playersPerTeam, current user as league owner
-    //and new team for current user with newTeamName
+    //and create new team for current user with newTeamName
+    if (req.user && req.body.leagueName) {
+        // get the auto-generated leagueID, so it can be used when adding new team
+        dbcon.query("SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'league' AND table_schema = DATABASE( ) ;", function (err, rows, cols) {
+            if (!err) {
+                let leagueID = rows[0].AUTO_INCREMENT;
+                dbcon.query("insert into league (ownerID, leagueName, players_per_team) values(?,?,?);", [req.user.username, req.body.leagueName, req.body.playersPerTeam], function (err2, rows, cols) {
+                    if (!err2) {
+                        dbcon.query("insert into team (leagueID, username, teamName) values (?,?,?);", [leagueID, req.user.username, req.body.newTeamName], function (err3, rows, cols) {
+                            if (err3) {
+                                next(err3);
+                            }
+                        });
+                    }
+                    else {
+                        next(err2);
+                    }
+                });
+            }
+            else {
+                next(err);
+            }
+        });
+    }
+
     res.redirect('/');
 });
 

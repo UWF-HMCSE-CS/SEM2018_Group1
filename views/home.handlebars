@@ -4,9 +4,15 @@
     <div class="card" id="card1">
         <h5 class="card-header">My Fantasy Leagues</h5>
         <div class="card-body">
+            {{#if userLeagues}}
+            {{#each userLeagues}}
+            <a href="league/{{leagueID}}" class="list-group-item list-group-item-action">{{leagueName}}</a>
+            {{/each}}
+            {{else}}
             <a href="#" class="list-group-item list-group-item-action">League 1</a>
             <a href="#" class="list-group-item list-group-item-action">League 2</a>
             <a href="#" class="list-group-item list-group-item-action">League 3</a>
+            {{/if}}
             <a href="createleague" class="btn btn-primary" id="createButton">Create League</a>
 
         </div>
