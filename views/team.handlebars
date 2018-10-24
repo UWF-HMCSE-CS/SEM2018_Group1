@@ -1,29 +1,30 @@
 <nav class="navbar navbar-expand-lg ">
-        <a class="navbar-brand" href="#">
-            <img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    <a class="navbar-brand" href="#">
+        <img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
             eSports Fantasy
-          </a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-              <a class="nav-item nav-link" href="/">Home</a>
-              <a class="nav-item nav-link" {{#if username}}href="/league"{{else}}href="/login/league"{{/if}}>League</a>
-              <a class="nav-item nav-link" {{#if username}}href="#"{{else}}href="/login/team"{{/if}}>Team</a>
-              <a class="nav-item nav-link" {{#if username}}href="/players"{{else}}href="/login/players"{{/if}}>Players</a>
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/">Home</a>
+            <a class="nav-item nav-link" {{#if username}}href="/league"{{else}}href="/login/league"{{/if}}>League</a>
+            <a class="nav-item nav-link" {{#if username}}href="#"{{else}}href="/login/team"{{/if}}>Team</a>
+            <a class="nav-item nav-link" {{#if username}}href="/players"{{else}}href="/login/players"{{/if}}>Players</a>
             
-          </div>
-          <a class="nav navbar-nav navbar-right">
+        </div>
+        <a class="nav navbar-nav navbar-right">
             {{#if username}}
-            <a href="/logout">Logged in as: {{username}}   <span class="glyphicon glyphicon-log-out"></span> Log out</a>
+                <a href="/logout">Logged in as: {{username}}   <span class="glyphicon glyphicon-log-out"></span> Log out</a>
             {{else}}
-            <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a>
+                <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a>
             {{/if}}
         </a>
-        </div>
-      </nav>
+    </div>
+</nav>
 
-      <table class="table">
-        <thead id="teamName"><h1>Team Name</h1>
-          <tr>
+<table class="table">
+    <thead id="teamName">
+        <h1>Team Name</h1>
+        <tr>
             <th scope="col">#</th>
             <th scope="col">Player Name</th>
             <th scope="col">Stat #1</th>
@@ -32,10 +33,10 @@
             <th scope="col">Stat #4</th>
             <th scope="col">Stat #5</th>
             <th scope="col">Stat #6</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
             <th scope="row">1</th>
             <td>Mark</td>
             <td>-</td>
@@ -65,5 +66,6 @@
             <td>-</td>
             <td>-</td>
           </tr>
-        </tbody>
-      </table>
+    </tbody>
+</table>
+
