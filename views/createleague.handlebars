@@ -1,18 +1,32 @@
-<form action="/createleague/create" method="post">
-  <div>
-    <label for="leagueName">League Name:</label>
-    <input type="text" id="leagueName" name="leagueName">
-    <input type="hidden" id="username" name="username" value="{{user.username}}">
-  </div>
-  <div>
-    <label for="numPlayers">Players per Team:</label>
-    <input type="text" id="numPlayers" name="numPlayers">
-  </div>
-  <div>
-    <label for="teamName">Your Team Name:</label>
-    <input type="text" id="teamName" name="teamName">
-  </div>
-  <div class="button">
-    <button type="submit">Create League</button>
-  </div>
+<form class="col-auto my-1" action="/createleague" method="post">
+    <div>
+        <label for="leagueName">League Name:</label>
+        <input type="text" id="leagueName" name="leagueName" required="required" maxlength="25">
+    </div>
+
+    <br />
+
+    <div>
+        <label for="newTeamName">Your Team Name:</label>
+        <input type="text" id="newTeamName" name="newTeamName" required="required" maxlength="25">
+    </div>
+
+    <br />
+
+    <div>
+        <div>
+            <label for="playersPerTeam">Players per Team:</label>
+            <select id="playersPerTeam" name="playersPerTeam" style="width: 40px">
+                {{#each nums1to20}}
+                <option value={{this}}>{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <br />
+    
+    <div class="button">
+        <button type="submit" class="btn btn-primary">Create League</button>
+    </div>
 </form>

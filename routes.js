@@ -153,6 +153,21 @@ router.get('/team', function (req, res) {
     });
 });
 
+router.get('/createleague', function (req, res) {
+    let nums1to20 = [];
+    for(let x = 1; x <= 20; x++) {
+        nums1to20.push(x);
+    }
+    res.render('createleague', {nums1to20});
+});
+
+router.post('/createleague', function (req, res) {
+    //console.log(req.body);
+    //create new league using leagueName, playersPerTeam, current user as league owner
+    //and new team for current user with newTeamName
+    res.redirect('/');
+});
+
 //until fixed
 router.get('/home.html', function (req, res) {
     res.redirect('/');
