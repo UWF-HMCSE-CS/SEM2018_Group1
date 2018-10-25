@@ -20,7 +20,7 @@ router.get('/login', function (req, res) {
 router.post('/login', function (req, res) {
     console.log(req.body);
     console.log(req.body.action);
-    console.log(req.body.action);
+    
     var successRoute = '/';
     if (req.body.action.startsWith('login')) {
         if (req.body.action != 'login') successRoute = '/' + req.body.action.substr(6)
