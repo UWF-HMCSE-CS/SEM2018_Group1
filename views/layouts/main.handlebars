@@ -1,24 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-	<link rel="shortcut icon" href="/appLogo.png" /><title>eSports Fantasy</title>
+	<link rel="shortcut icon" href="/appLogo.png" />
+	<title>eSports Fantasy</title>
 
 	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
 	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/style.css" rel="stylesheet">
 </head>
 <!--body class="text-center"-->
+
 <body>
+<nav class="navbar navbar-expand-lg ">
+    <a class="navbar-brand" href="#">
+        <img src="/invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        eSports Fantasy
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="#">Home</a>
+            <a class="nav-item nav-link" {{#if username}}href="/league"{{else}}href="/login/league"{{/if}}>League</a>
+            <a class="nav-item nav-link" {{#if username}}href="/team"{{else}}href="/login/team"{{/if}}>Team</a>
+            <a class="nav-item nav-link" {{#if username}}href="/players"{{else}}href="/login/players"{{/if}}>Players</a>
+        </div>
+        <a class="nav navbar-nav navbar-right">
+            {{#if username}}
+                <a href="/logout">Logged in as: {{username}}   <span class="glyphicon glyphicon-log-out"></span> Log out</a>
+            {{else}}
+                <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a>
+            {{/if}}
+        </a>
+    </div>
+</nav><!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
 	{{{body}}}
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/jquery.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="/bootstrap/js/bootstrap.min.js"></script>
+
 
 </body>
+
 </html>
