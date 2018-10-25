@@ -1,32 +1,32 @@
-<form class="col-auto my-1" action="/createleague" method="post">
-    <div>
-        <label for="leagueName">League Name:</label>
-        <input type="text" id="leagueName" name="leagueName" required="required" maxlength="25">
-    </div>
-
-    <br />
-
-    <div>
-        <label for="newTeamName">Your Team Name:</label>
-        <input type="text" id="newTeamName" name="newTeamName" required="required" maxlength="25">
-    </div>
-
-    <br />
-
+<form class="form-signin" action="/createleague" method="post">
     <div>
         <div>
-            <label for="playersPerTeam">Players per Team:</label>
-            <select id="playersPerTeam" name="playersPerTeam" style="width: 40px">
-                {{#each nums1to20}}
-                <option value={{this}}>{{this}}</option>
-                {{/each}}
-            </select>
+            <label for="leagueName" class="sr-only">League Name</label>
+            <input type="text" id="leagueName" name="leagueName" class="form-control" placeholder="League Name" autofocus="" required="required" maxlength="25">
         </div>
-    </div>
 
-    <br />
-    
-    <div class="button">
-        <button type="submit" class="btn btn-primary">Create League</button>
+        <br />
+
+        <div>
+            <label for="newTeamName" class="sr-only">Your Team Name</label>
+            <input type="text" id="newTeamName" name="newTeamName" class="form-control" placeholder="Your Team Name" autofocus="" required="required" maxlength="25">
+        </div>
+
+        <br />
+
+            <div align="center">
+                <label for="playersPerTeam" style="font-size: 20px;">Players per Team</label>
+                <select class="browser-default custom-select mb-4" id="playersPerTeam" name="playersPerTeam" style="width: 50px;">
+                    {{#each nums1to20}}
+                    <option value={{this}}>{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+        <br />
+
+        <div class="button" align="center">
+            <button type="submit" class="btn btn-primary">Create League</button>
+        </div>
     </div>
 </form>
