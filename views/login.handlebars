@@ -18,23 +18,27 @@
 <!--body class="text-center"-->
 
 <body class="text-center">
-<form class="form-signin" method="post" action="/login">
+	<div class="form-signin">
+		<form method="post" action="/login">
   <img class="mb-4" src="/appLogo.png" alt="" width="250" height="245">
   <h1 class="h1 mb-3 font-weight-normal">eSports Fantasy</h1><br>
   <label for="inputUsername" class="sr-only">Username</label>
-  <input type="text" id="inputUsername" class="form-control" placeholder="Username" autofocus="" name="username">
+  <input type="text" id="inputUsername" class="form-control" placeholder="Username" autofocus="" pattern=".{7,}" required="required" title="7 characters minimum" name="username">
   <label for="inputPassword" class="sr-only">Password</label>
-  <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password">
+  <input type="password" id="inputPassword" class="form-control" placeholder="Password" pattern=".{7,}" required="required" title="7 characters minimum" name="password">
   <div class="checkbox mb-3">
     <label>
       <input type="checkbox" value="remember-me" name="rememberme"> Remember me
     </label><br><br>
   </div>
   <button class="btn btn-lg btn-primary btn-block" type="submit" name="action" {{#if next}}value="login-{{next}}"{{else}}value="login"{{/if}}>Log In</button>
-  <button href="/join" class="btn btn-sm btn-basic btn-block" type="submit" name="action" value="register" formaction="/login" formmethod="post">Sign Up</button>
 
 </form>
 
+<form method="post" action="/login">
+	<button href="/join" class="btn btn-sm btn-basic btn-block" type="submit" name="action" value="register" formaction="/login" formmethod="post">Sign up</button>
+</form>
+</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="/jquery.min.js"></script>
