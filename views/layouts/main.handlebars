@@ -18,29 +18,33 @@
 <!--body class="text-center"-->
 
 <body>
-	<nav class="navbar navbar-expand-lg ">
-		<a class="navbar-brand" href="/">
-			<img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-			eSports Fantasy
-		</a>
-		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-			<div class="navbar-nav">
-				<a class="nav-item nav-link" href="/">Home</a>
-				<a class="nav-item nav-link" href="league">League</a>
-				<a class="nav-item nav-link" href="team">Team</a>
-				<a class="nav-item nav-link" href="players">Players</a>
 
-			</div>
-			<a class="nav navbar-nav navbar-right">
-				<a href="/logout">Logged in as: {{username}} <span class="glyphicon glyphicon-log-out"></span> Log out</a>
-			</a>
-		</div>
-	</nav>
+<nav class="navbar navbar-expand-lg ">
+    <a class="navbar-brand" href="#">
+        <img src="/invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        eSports Fantasy
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/">Home</a>
+            <a class="nav-item nav-link" {{#if username}}href="/league"{{else}}href="/login/league"{{/if}}>League</a>
+            <a class="nav-item nav-link" {{#if username}}href="/team"{{else}}href="/login/team"{{/if}}>Team</a>
+            <a class="nav-item nav-link" {{#if username}}href="/players"{{else}}href="/login/players"{{/if}}>Players</a>
+        </div>
+        <a class="nav navbar-nav navbar-right">
+            {{#if username}}
+                <a href="/logout">Logged in as: {{username}}   <span class="glyphicon glyphicon-log-out"></span> Log out</a>
+            {{else}}
+                <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a>
+            {{/if}}
+        </a>
+    </div>
+</nav><!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
 	{{{body}}}
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/jquery.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="/bootstrap/js/bootstrap.min.js"></script>
+
 
 </body>
 

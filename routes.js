@@ -12,7 +12,8 @@ router.get('/login', function (req, res) {
     console.log(req.user);
     if (req.user) res.redirect('/');
     else
-        res.render('login', {layout:false,
+        res.render('login', {
+            layout: false,
             username: (req.user && req.user.username) ? req.user.username : null
         });
 });
@@ -212,7 +213,7 @@ router.get('/players.html', function (req, res) {
 router.get('/team.html', function (req, res) {
     res.redirect('/team');
 });
-router.get('/login.html', function (req, res) {
+router.get('/login.handlebars', function (req, res) {
     res.redirect('/login');
 });
 router.get('/league.html', function (req, res) {
