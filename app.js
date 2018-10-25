@@ -34,14 +34,17 @@ let test = function (username, password, done) {
         var loggedInUser;
         console.log("inside passport strat");
         dbcon.query('select * from login where username = ? and password = AES_Encrypt(?,?);',[username,password,require(__dirname + '/credentials.js').loginKey], function(err,rows,cols){
-        	console.log(rows);
+        	console.log('login?: ' + rows);
         	if(!err && rows && rows[0]){
+        		console.log("Success?");
         		return done(null, rows[0]);
         	}else {
+        		console.log("Failure");
+
         		return done(null, false, {message: "Failed to login (Bad Credentials?)"});
         	}
         });
-}
+};
 
 
 /* define local strategy for login here when db protocol known*/
@@ -58,7 +61,7 @@ passport.deserializeUser(function (username, done) {
     dbcon.query('select username, password from login where username = ?;', [username], function(err, rows, cols){
         console.log(rows);
         if (err || !rows || !rows[0]) {
-        	console.log("Failed Login")
+        	console.log("Failed Login");
             return done(null, false, { message: 'Failure... :(' });
         } else {
             loggedInUser = rows[0];
