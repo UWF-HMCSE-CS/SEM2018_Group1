@@ -20,7 +20,7 @@ router.get('/login', function (req, res) {
 router.post('/login', function (req, res) {
     console.log(req.body);
     console.log(req.body.action);
-    console.log(req.body.action);
+
     var successRoute = '/';
     if (req.body.action.startsWith('login')) {
         if (req.body.action != 'login') successRoute = '/' + req.body.action.substr(6)
@@ -33,27 +33,69 @@ router.post('/login', function (req, res) {
         console.log(passport._strategies.local._verify(req.body.username, req.body.password, function (item1, item2) {
 
         }));
+        let test = function (username, password, done) {
+            var loggedInUser;
+            console.log("inside passport strat");
+            dbcon.query('select * from login where username = ? and password = AES_Encrypt(?,?);',[username,password,require(__dirname + '/credentials.js').loginKey], function(err,rows,cols){
+                console.log('login?: ' + rows);
+                if(!err && rows && rows[0]){
+                    console.log("Success?");
+                    return done(null, rows[0]);
+                }else {
+                    console.log("Failure");
+
+                    return done(null, false, {message: "Failed to login (Bad Credentials?)"});
+                }
+            });
+        };
         let authFunction = function (err, user, info) {
+            console.log('error');
             console.log(err);
+            console.log('user');
             console.log(user);
+            console.log('info');
             console.log(info);
             if (err) {
                 console.log(err);
-                return next(err);
+                return err;
             }
+            console.log('user' + user);
+            console.log(user);
             if (!user) {
                 console.log("Sorry credentials don't match");
                 //badCreds = 1;
                 return res.redirect('/login');
             } else {
-                req.login(user, function (err) {
-                    if (err) {
-                        return next(err);
+                let test = function (username, password, done) {
+                    var loggedInUser;
+                    console.log("inside passport strat");
+                    dbcon.query('select * from login where username = ? and password = AES_Encrypt(?,?);',[username,password,require(__dirname + '/credentials.js').loginKey], function(err,rows,cols){
+                        console.log('login?: ' + rows);
+                        if(!err && rows && rows[0]){
+                            console.log("Success?");
+                            return done(null, rows[0]);
+                        }else {
+                            console.log("Failure");
+
+                            return done(null, false, {message: "Failed to login (Bad Credentials?)"});
+                        }
+                    });
+                };
+                test(user.username, user.password, function(test1,test2,test3){
+                    if(test2 && !test3){
+                        req.login(user, function (err) {
+                            if (err) {
+                                return err;//next(err);
+                            }
+                            console.log('logintest2: ');
+                            console.log(user);
+                            //badCreds = 0;
+                            //currentUserID = user.id;
+                            return res.redirect(successRoute);
+                        });
                     }
-                    //badCreds = 0;
-                    //currentUserID = user.id;
-                    return res.redirect(successRoute);
-                });
+                    else return res.redirect('/login');
+                })
             }
         };
         authFunction(null, {
