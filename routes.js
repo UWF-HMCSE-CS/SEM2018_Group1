@@ -273,7 +273,12 @@ router.get('/', function (req, res) {
     });
 });
 router.get('/:viewname', function(req,res,next){
-    res.render(req.params.viewname, {}, function(err, html){
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    res.render(req.params.viewname, {
+        username: user.username
+    }, function(err, html){
         if(!html) return next();
         else res.send(html);
     })
