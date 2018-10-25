@@ -108,6 +108,17 @@ router.post('/join', function (req, res) {
         }
     });
 });
+
+// If trying to access any page other than join or log in
+// while not logged in, redirect to login page
+router.use(function(req, res, next) {
+	if (!req.user) {
+		res.redirect('/login');
+		return;
+	}
+	next();
+});
+
 router.get('/set/email/:emailaddress',function(req,res){
     if(req.user) {
         dbcon.query('insert into user values(?,?) on duplicate key update email = ?;', [req.user.username, req.params.emailaddress, req.params.emailaddress], function (err2, rows, cols) {
