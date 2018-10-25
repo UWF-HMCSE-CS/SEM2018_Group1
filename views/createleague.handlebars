@@ -1,0 +1,33 @@
+<form class="form-signin" action="/createleague" method="post">
+    <div>
+        <div>
+            <label for="leagueName" class="sr-only">League Name</label>
+            <input type="text" id="leagueName" name="leagueName" class="form-control" placeholder="League Name" autofocus="" required="required" maxlength="25">
+            <input type="hidden" id="username" name="username" value="{{user.username}}">
+        </div>
+
+        <br />
+
+        <div>
+            <label for="newTeamName" class="sr-only">Your Team Name</label>
+            <input type="text" id="newTeamName" name="newTeamName" class="form-control" placeholder="Your Team Name" autofocus="" required="required" maxlength="25">
+        </div>
+
+        <br />
+
+            <div align="center">
+                <label for="playersPerTeam" style="font-size: 20px;">Players per Team</label>
+                <select class="browser-default custom-select mb-4" id="playersPerTeam" name="playersPerTeam" style="width: 50px;">
+                    {{#each nums1to20}}
+                    <option value={{this}}>{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+        <br />
+
+        <div class="button" align="center">
+            <button type="submit" class="btn btn-primary">Create League</button>
+        </div>
+    </div>
+</form>

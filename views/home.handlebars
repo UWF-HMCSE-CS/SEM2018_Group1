@@ -1,67 +1,65 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#"><img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                    eSports Fantasy</a>
-                   
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                 <!-- <span class="navbar-toggler-icon" ></span>-->
-                 <span class="navbar-toggler-icon" ></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                  <ul class="navbar-nav">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="league.html">League</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="team.html">Team</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="players.html">Players</a>
-                    </li>
-                  </ul>
-                  
-                </div>
-                <a class="nav navbar-nav navbar-right">
-                        <a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
-                    </a>
-              </nav>
+<!-- Ideas: Carousel,News, Activity, Account Settings? -->
+	
 
-<!-- Ideas: News, Activity, Account Settings? -->
-      <div id="carousel" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carousel" data-slide-to="0"></li>
-            <li data-target="#carousel" data-slide-to="1"></li>
-            <li data-target="#carousel" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-            <div class="item active">
-                <img src="ow1.jpg" alt="Slide 1">
-            </div>
-            <div class="item">
-                <img src="ow2.jpg" alt="Slide 2">
-            </div>
-            <div class="item">
-                <img src="ow3.jpg" alt="Slide 3">
-            </div>
-        </div>
-        <a href="#carousel" class="left carousel-control" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a href="#carousel" class="right carousel-control" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-    </div>
-      
-      
-      
+	<div class="entire-panel">
+	    <div class="card" id="card1">
+	        <h5 class="card-header">My Fantasy Leagues</h5>
+	        <div class="card-body">
+	            {{#if userLeagues}}
+	            {{#each userLeagues}}
+	            <a href="league/{{leagueID}}" class="list-group-item list-group-item-action">{{leagueName}}</a>
+	            {{/each}}
+	            {{else}}
+	            <a href="#" class="list-group-item list-group-item-action">League 1</a>
+	            <a href="#" class="list-group-item list-group-item-action">League 2</a>
+	            <a href="#" class="list-group-item list-group-item-action">League 3</a>
+	            {{/if}}
+	            <a href="createleague" class="btn btn-primary" id="createButton">Create League</a>
+	
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+	        </div>
+	    </div>
+	    <div class="card">
+	        <h5 class="card-header">Pending Invitations</h5>
+	        <div class="card-body">
+	            <a href="#" class="list-group-item list-group-item-action">Join League 4</a>
+	
 
-    <script>
-      $("#carousel").carousel();
-  </script>
+	        </div>
+	    </div>
+	</div>
+	<hr />
+	<hr />
+	<hr />
+	<hr />
+	
+
+	<div id="carousel" class="carousel slide" data-ride="carousel">
+	    <ol class="carousel-indicators">
+	        <li data-target="#carousel" data-slide-to="0"></li>
+	        <li data-target="#carousel" data-slide-to="1"></li>
+	        <li data-target="#carousel" data-slide-to="2"></li>
+	    </ol>
+	    <div class="carousel-inner">
+	        <div class="item active">
+	            <img src="ow1.jpg" alt="Slide 1">
+	        </div>
+	        <div class="item">
+	            <img src="ow2.jpg" alt="Slide 2">
+	        </div>
+	        <div class="item">
+	            <img src="ow3.jpg" alt="Slide 3">
+	        </div>
+	    </div>
+	    <a href="#carousel" class="left carousel-control" data-slide="prev">
+	        <span class="glyphicon glyphicon-chevron-left"></span>
+	    </a>
+	    <a href="#carousel" class="right carousel-control" data-slide="next">
+	        <span class="glyphicon glyphicon-chevron-right"></span>
+	    </a>
+	</div>
+	
+
+	<script>
+	    $("#carousel").carousel();
+	</script>

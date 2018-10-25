@@ -6,8 +6,15 @@ let session = require('cookie-session');
 let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
 let app = express();
+let credentials = require(__dirname + '/credentials.js');
+let dbcon = require('./lib/mysqlDBMgr.js');
 
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(cookieParser());
+app.use(session({ keys: [credentials.cookieSecret] }));
+app.use(passport.initialize());
+app.use(passport.session());
 let handlebars = require('express-handlebars').create({
 	defaultLayout: 'main',
 	helpers: {
@@ -16,22 +23,50 @@ let handlebars = require('express-handlebars').create({
 		}
 	}
 });
-
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
 
 console.log('running from ' + __dirname);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false}));
-app.use(cookieParser());
-app.use(passport.initialize());
-app.use(passport.session());
+
+let test = function (username, password, done) {
+        var loggedInUser;
+        console.log("inside passport strat");
+        dbcon.query('select * from login where username = ? and password = AES_Encrypt(?,?);',[username,password,require(__dirname + '/credentials.js').loginKey], function(err,rows,cols){
+        	console.log(rows);
+        	if(!err && rows && rows[0]){
+        		return done(null, rows[0]);
+        	}else {
+        		return done(null, false, {message: "Failed to login (Bad Credentials?)"});
+        	}
+        });
+}
+
 
 /* define local strategy for login here when db protocol known*/
-
+passport.use(new LocalStrategy(test));
 /* passport.serializeUser/deserializeUser for mysql */
+
+passport.serializeUser(function (user, done) {
+	console.log(user);
+    done(null, user.username);
+});
+passport.deserializeUser(function (username, done) {
+    var loggedInUser;
+    console.log("deserializing");
+    dbcon.query('select username, password from login where username = ?;', [username], function(err, rows, cols){
+        console.log(rows);
+        if (err || !rows || !rows[0]) {
+        	console.log("Failed Login")
+            return done(null, false, { message: 'Failure... :(' });
+        } else {
+            loggedInUser = rows[0];
+            console.log(loggedInUser);
+            return done(null, loggedInUser);
+        }
+    });
+});
 
 app.use(express.static(__dirname + '/public'));
 app.use('/', require(__dirname + '/routes.js'));
