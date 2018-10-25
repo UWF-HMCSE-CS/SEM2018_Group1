@@ -272,6 +272,11 @@ router.get('/', function (req, res) {
         username: user.username
     });
 });
-
+router.get('/:viewname', function(req,res,next){
+    res.render(req.params.viewname, {}, function(err, html){
+        if(!html) return next();
+        else res.send(html);
+    })
+});
 
 module.exports = router;
