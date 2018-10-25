@@ -86,7 +86,7 @@ router.get('/login/:next', function (req, res) {
 router.get('/join', function (req, res) {
     if (req.user) res.redirect('/');
     else
-        res.render('signUp', {});
+        res.render('signUp', {layout:false});
 });
 router.post('/join', function (req, res) {
     console.log(req.body);
@@ -109,6 +109,17 @@ router.post('/join', function (req, res) {
         }
     });
 });
+
+// If trying to access any page other than join or log in
+// while not logged in, redirect to login page
+router.use(function(req, res, next) {
+	if (!req.user) {
+		res.redirect('/login');
+		return;
+	}
+	next();
+});
+
 router.get('/set/email/:emailaddress',function(req,res){
     if(req.user) {
         dbcon.query('insert into user values(?,?) on duplicate key update email = ?;', [req.user.username, req.params.emailaddress, req.params.emailaddress], function (err2, rows, cols) {
@@ -152,6 +163,44 @@ router.get('/team', function (req, res) {
     res.render('team', {
         username: user.username
     });
+});
+
+router.get('/createleague', function (req, res) {
+    let nums1to20 = [];
+    for(let x = 1; x <= 20; x++) {
+        nums1to20.push(x);
+    }
+    res.render('createleague', {nums1to20, username: req.user.username});
+});
+
+router.post('/createleague', function (req, res) {
+    //create new league using leagueName, playersPerTeam, current user as league owner
+    //and create new team for current user with newTeamName
+    if (req.user && req.body.leagueName) {
+        // get the auto-generated leagueID, so it can be used when adding new team
+        dbcon.query("SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'league' AND table_schema = DATABASE( ) ;", function (err, rows, cols) {
+            if (!err) {
+                let leagueID = rows[0].AUTO_INCREMENT;
+                dbcon.query("insert into league (ownerID, leagueName, players_per_team) values(?,?,?);", [req.user.username, req.body.leagueName, req.body.playersPerTeam], function (err2, rows, cols) {
+                    if (!err2) {
+                        dbcon.query("insert into team (leagueID, username, teamName) values (?,?,?);", [leagueID, req.user.username, req.body.newTeamName], function (err3, rows, cols) {
+                            if (err3) {
+                                next(err3);
+                            }
+                        });
+                    }
+                    else {
+                        next(err2);
+                    }
+                });
+            }
+            else {
+                next(err);
+            }
+        });
+    }
+
+    res.redirect('/');
 });
 
 //until fixed

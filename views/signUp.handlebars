@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<link rel="shortcut icon" href="/appLogo.png" />
+	<title>eSports Fantasy</title>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/style.css" rel="stylesheet">
+</head>
+<!--body class="text-center"-->
+
+<body>
 <nav class="navbar navbar-expand-lg ">
         <a class="navbar-brand" href="#">
             <img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -13,7 +33,7 @@
               </dt>
               <dd>
                 <auto-check src="/signup_check/username" csrf="OiuO9nBuQDNx3LYtaUMo1Xmny/KGC+BpjHrVgit38bl0mr6BSm1Ycia9BJunO2koiNlOFCpa/w3H5xNbLORrUQ==">
-                  <input type="text" name="user[login]" id="user[login]" class="form-control form-control-lg input-block" placeholder="Pick a username" autofocus="" autocomplete="off" spellcheck="false" value="{{uname}}">
+                  <input type="text" name="user[login]" id="user[login]" class="form-control form-control-lg input-block" placeholder="Pick a username" autofocus="" autocomplete="off" spellcheck="false" value="{{uname}}" pattern=".{7,}" required="required" title="7 characters minimum">
                 </auto-check>
               </dd>
             </dl>
@@ -23,7 +43,7 @@
               </dt>
               <dd>
                 <auto-check src="/signup_check/email" csrf="y1dNMsQcAvHIFrBSM1Vvh58M6UYfZsYrEwx7a/fkO5hDFpMBs4FlKGUqkCYUiUriyLO8xlKjsc1d/yRQm+8USw==">
-                  <input type="text" name="user[email]" id="user[email]" class="form-control form-control-lg input-block js-email-notice-trigger" placeholder="you@example.com" autocomplete="off" spellcheck="false">
+                  <input type="email" name="user[email]" id="user[email]" class="form-control form-control-lg input-block js-email-notice-trigger" placeholder="you@example.com" autocomplete="off" spellcheck="false">
                 </auto-check>
               </dd>
             </dl>
@@ -33,7 +53,7 @@
                   <label class="form-label f5" for="user[password]">Password</label>
                 </dt>
                 <dd>
-                  <input type="password" name="user[password]" id="user[password]" class="form-control form-control-lg input-block" placeholder="Create a password" value="{{pword}}">
+                  <input type="password" name="user[password]" id="user[password]" class="form-control form-control-lg input-block" placeholder="Create a password" value="{{pword}}" pattern=".{7,}" required="required" title="7 characters minimum">
                 </dd>
                 <p class="form-control-note">Make sure it's at least 7 characters, including a number, and a lowercase letter.</p>
               </dl>
@@ -49,3 +69,12 @@
         </form>      
         </div>
       </div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
