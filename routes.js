@@ -185,8 +185,42 @@ router.get('/league', function (req, res) {
         username: user.username
     });
 });
-router.get('/league/add', function(req,res){
-    res.redirect('/league');
+
+router.get('/league/:id', function(req,res){
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+
+    dbcon.query('select leagueName from league where leagueID=?;', [req.params.id], function (err, rows, cols) {
+        if (err) {
+            next(err);
+        }
+        else {
+            let leagueName = rows[0].leagueName;
+
+            dbcon.query('select teamID, username, teamName from team where leagueID=?;', [req.params.id], function (err2, rows, cols) {
+                if (err2) {
+                    next(err2);
+                }
+                else {
+                    let teamsInLeague = [];
+                    for(let i = 0; i < rows.length; i++) {
+                        teamsInLeague.push({
+                            teamID: rows[i].teamID,
+                            username: rows[i].username,
+                            teamName: rows[i].teamName
+                        });
+                    }
+        
+                    res.render('league_detail', {
+                        username: user.username,
+                        leagueName: leagueName,
+                        teams: teamsInLeague
+                    });
+                }
+            });
+        }
+    });
 });
 router.get('/players', function (req, res) {
     let user = {
@@ -272,7 +306,7 @@ router.get('/', function (req, res) {
     let userLeagues = [];
     dbcon.query('select leagueID, leagueName from league where ownerID=?;', [user.username], function (err, rows, cols) {
         if (err) {
-            next(err2);
+            next(err);
         }
         else {
             for(let i = 0; i < rows.length; i++) {
