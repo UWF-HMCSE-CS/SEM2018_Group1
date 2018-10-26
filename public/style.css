@@ -367,3 +367,37 @@ a:hover {
 #teamName {
     text-align:center;
 }
+
+.bg-light {
+   background-color: #004C97!important;
+   
+}
+.navbar-brand {
+   color: white!important;
+}
+.navbar-light .navbar-toggler {
+   border-color:white!important;
+   color: white!important;
+}
+
+
+.navbar-toggler .navbar-toggler-icon {
+   border-color:white!important;
+   color: white!important;
+  
+}
+
+.navbar-toggler {
+   color: white!important;
+   border-color: white!important;
+ }
+ 
+.navbar-nav {
+   margin: 0px;
+}
+.navbar-nav .nav-link:hover {
+   color: rgb(158, 158, 158)!important;
+}
+.nav-link {
+   color: white!important;
+}

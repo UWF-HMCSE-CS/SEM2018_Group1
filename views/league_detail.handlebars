@@ -1,6 +1,6 @@
 <table class="table">
     <thead id="teamName">
-    <h1>League Name</h1>
+    <h1>{{leagueName}}</h1>
     <tr>
         <th scope="col">#</th>
         <th scope="col">Team Name</th>
@@ -8,19 +8,21 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
+        {{#each teams}}
+        <tr>
         <th scope="row">1</th>
-        <td>Team 1</td>
+        <td>{{teamName}}</td>
         <td>-</td>
-    </tr>
+        </tr>
+        {{/each}}
     <tr>
         <th scope="row">2</th>
-        <td>Team 2</td>
+        <td>Fake Team 2</td>
         <td>-</td>
     </tr>
     <tr>
         <th scope="row">3</th>
-        <td>Team 3</td>
+        <td>Fake Team 3</td>
         <td>-</td>
     </tr>
     </tbody>
