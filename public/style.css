@@ -256,6 +256,7 @@ a {
 
 .entire-panel {
     width:100%;
+   
 }
 
 .card-header {
@@ -263,28 +264,19 @@ font-size: 18px;
 text-align: center;
 }
 
-#card1 {
-    float:left;
-    width:50%;
-}
 
-#inviteButton {
-    margin-top: 70px;
-    align-items: center;
-    justify-content: center;
-    display:flex;
-    margin-left: 40%;
-    margin-right: 40%
+
+
+
+#createButton {
+ margin-top: 10px;
+ float:none;
 }
 
 #joinButton {
-    margin-top: 10px;
-    align-items: center;
-    justify-content: center;
-    display:flex;
-    margin-left: 40%;
-    margin-right: 40%
-}
+  
+    float:right;
+   }
 
 a:hover {
     color:rgb(197, 197, 197);
@@ -334,7 +326,7 @@ a:hover {
 
 .carousel {
     height: 500px;
-    margin-bottom: 60px;
+    margin-bottom: 0px;
 }
 
 .carousel-caption {
@@ -379,22 +371,12 @@ a:hover {
     color: white!important;
 }
 
-.navbar-light .navbar-toggler {
-    border-color:white!important;
-    color: white!important;
+ 
+
+ 
+.dark-blue-text {
+    color: white;
 }
- 
- 
-.navbar-toggler .navbar-toggler-icon {
-    border-color:white!important;
-    color: white!important;
-   
-}
- 
-.navbar-toggler {
-    color: white!important;
-    border-color: white!important;
-  }
 
  
 
@@ -407,4 +389,40 @@ a:hover {
 }
 .nav-link {
     color: white!important;
+}
+
+.card-header {
+    background-color: #004C97;
+    margin-top: 0px;
+   color: white;
+  
+}
+
+#card1 {
+    text-align:center;
+}
+
+.list-group-item {
+    text-align: left;
+}
+
+#pendListItem {
+    width: 100%;
+    
+}
+
+.card-body {
+    text-align:center;
+}
+
+#inviteButton {
+        margin-top: 10px;
+        float:none;
+       
+}
+
+.card {
+    border-left: none;
+    border-right:none;
+   
 }

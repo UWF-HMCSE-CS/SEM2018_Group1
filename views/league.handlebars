@@ -1,19 +1,7 @@
 <div class="entire-panel">
-	    <div class="card" id="card1">
-	        <h5 class="card-header">My Fantasy Leagues</h5>
-	        <div class="card-body">
-	            {{#each leagues as |league|}}
-	                <a id="display-{{league.id}}" href="/league/detail/{{league.id}}" class="list-group-item list-group-item-action">{{league.name}}</a>
-	            {{/each}}
-	            {{#if leagues}}{{else}}
-	                <a id="display-test1" href="#" class="list-group-item list-group-item-action">League 2</a>
-	                <a id="display-test2" href="#" class="list-group-item list-group-item-action">League 3</a>
-	            {{/if}}
-	            <a href="/league/add" class="btn btn-primary" id="joinButton">Join/Create League</a>
-	        </div>
-	    </div>
+	    
 	    {{#each leagues as |league|}}
-	    <div id='info-{{league.id}}' class="card hidden">
+	    <div id='info-{{league.id}}' class="card">
 	        <h5 class="card-header">{{league.name}}</h5>
 	        <div class="card-body">
 	            <p class="card-text">Information Goes Here</p>
@@ -21,15 +9,8 @@
 	        </div>
 	    </div>
 	    {{/each}}
-	    <div id='info-test1' class="card hidden">
-	        <h5 class="card-header">Test1</h5>
-	        <div class="card-body">
-	            <p class="card-text">Information Goes Here</p>
-	            <a href="/league/invite/" class="btn btn-primary" id="inviteButton">Invite Players</a>
-	        </div>
-	    </div>
-	    <div id='info-test2' class="card hidden">
-	        <h5 class="card-header">Test2</h5>
+	    <div id='info-test1' class="card">
+	        <h5 class="card-header">Selected name of league from home page goes here</h5>
 	        <div class="card-body">
 	            <p class="card-text">Information Goes Here</p>
 	            <a href="/league/invite/" class="btn btn-primary" id="inviteButton">Invite Players</a>
@@ -38,7 +19,7 @@
 	</div>
 	
 
-	<script>
+	<!--<script>
 	    $(document).ready(function(){
 	        {{#each leagues as |league|}}
 	            $('#display-{{league.id}}').mouseover(function(){
@@ -73,4 +54,4 @@
 	</script>
 
     });
-</script>
+</script>-->

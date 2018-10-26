@@ -1,31 +1,5 @@
 <!-- Ideas: Carousel,News, Activity, Account Settings? -->
-	
-
-	<div class="entire-panel">
-	    <div class="card" id="card1">
-	        <h5 class="card-header">My Fantasy Leagues</h5>
-	        <div class="card-body">
-	            {{#if userLeagues}}
-	            {{#each userLeagues}}
-	            <a href="league/{{leagueID}}" class="list-group-item list-group-item-action">{{leagueName}}</a>
-	            {{/each}}
-	            {{else}}
-	            <a href="#" class="list-group-item list-group-item-action">League 1</a>
-	            <a href="#" class="list-group-item list-group-item-action">League 2</a>
-	            <a href="#" class="list-group-item list-group-item-action">League 3</a>
-	            {{/if}}
-	            <a href="createleague" class="btn btn-primary" id="createButton">Create League</a>
-	
-
-	        </div>
-	    </div>
-	    <div class="card">
-	        <h5 class="card-header">Pending Invitations</h5>
-	        <div class="card-body">
-	            <a href="#" class="list-group-item list-group-item-action">Join League 4</a>
-	
-
-<div id="carousel" class="carousel slide" data-ride="carousel">
+	<div id="carousel" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#carousel" data-slide-to="0"></li>
         <li data-target="#carousel" data-slide-to="1"></li>
@@ -48,6 +22,31 @@
     <a href="#carousel" class="right carousel-control" data-slide="next">
         <span class="glyphicon glyphicon-chevron-right"></span>
     </a>
+</div>
+
+		<div class="entire-panel">
+	    <div class="card" id="card1">
+	        <h5 class="card-header">My Fantasy Leagues</h5>
+	        <div class="card-body">
+	            {{#if leagues}}{{else}}
+	                <a id="display-test1" href="league/{{leagueID}}" class="list-group-item list-group-item-action">League 1</a>
+	                <a id="display-test2" href="league/{{leagueID}}" class="list-group-item list-group-item-action">League 2</a>
+	            {{/if}}
+	            <a href="/league/add" class="btn btn-primary" id="createButton">Create League</a>
+	        </div>
+	    </div>
+	   
+<div class="card" id="pending">
+	        <h5 class="card-header">Pending Invitations</h5>
+	        <div class="card-body">
+    <a href="#" class="list-group-item" id ="pendListItem">
+      <span id="testPen"></span>
+      League 4
+      <span class="pull-right">
+        <button class="btn btn-primary" id="joinButton">Join League</button>
+      </span>
+    </a>
+  </div>
 </div>
 
 	<script>
