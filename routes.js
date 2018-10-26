@@ -268,8 +268,25 @@ router.get('/', function (req, res) {
         username: (req.user && req.user.username) ? req.user.username : null
     };
     //console.log(req);
-    res.render('home', {
-        username: user.username
+
+    let userLeagues = [];
+    dbcon.query('select leagueID, leagueName from league where ownerID=?;', [user.username], function (err, rows, cols) {
+        if (err) {
+            next(err2);
+        }
+        else {
+            for(let i = 0; i < rows.length; i++) {
+                userLeagues.push({
+                    leagueID: rows[i].leagueID,
+                    leagueName: rows[i].leagueName
+                })
+            }
+
+            res.render('home', {
+                username: user.username,
+                userLeagues: userLeagues
+            });
+        }
     });
 });
 router.get('/:viewname', function(req,res,next){
