@@ -1,4 +1,3 @@
-
 .text-center {
     text-align: center!important;
 }
@@ -256,7 +255,7 @@ a {
 
 .entire-panel {
     width:100%;
-   
+
 }
 
 .card-header {
@@ -269,14 +268,22 @@ text-align: center;
 
 
 #createButton {
- margin-top: 10px;
- float:none;
+    margin-top: 10px;
+    float:none;
+   }
+#inviteButton {
+    margin-top: 70px;
+    align-items: center;
+    justify-content: center;
+    display:flex;
+    margin-left: 40%;
+    margin-right: 40%
 }
 
 #joinButton {
-  
+
     float:right;
-   }
+}
 
 a:hover {
     color:rgb(197, 197, 197);
@@ -371,12 +378,24 @@ a:hover {
     color: white!important;
 }
 
+.navbar-light .navbar-toggler {
+    border-color:white!important;
+    color: white!important;
+}
  
-
  
-.dark-blue-text {
+.navbar-toggler .navbar-toggler-icon {
+    border-color:white!important;
+    color: white!important;
+   
+}
+ .dark-blue-text {
     color: white;
 }
+.navbar-toggler {
+    color: white!important;
+    border-color: white!important;
+  }
 
  
 
