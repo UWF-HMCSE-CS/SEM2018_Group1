@@ -185,8 +185,45 @@ router.get('/league', function (req, res) {
         username: user.username
     });
 });
-router.get('/league/add', function(req,res){
-    res.redirect('/league');
+
+router.get('/league/:id', function(req,res){
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+
+    
+    let league = { id: req.params.id };
+
+    dbcon.query('select leagueName from league where leagueID=?;', [league.id], function (err, rows, cols) {
+        if (err) {
+            next(err);
+        }
+        else {
+            if (rows[0]) {
+                league.name = rows[0].leagueName;
+            }
+            dbcon.query('select teamID, username, teamName from team where leagueID=?;', [req.params.id], function (err2, rows, cols) {
+                if (err2) {
+                    next(err2);
+                }
+                else {
+                    let teamsInLeague = [];
+                    for(let i = 0; i < rows.length; i++) {
+                        teamsInLeague.push({
+                            teamID: rows[i].teamID,
+                            username: rows[i].username,
+                            teamName: rows[i].teamName
+                        });
+                    }
+                    league.teams = teamsInLeague;
+                    res.render('league_detail', {
+                        username: user.username,
+                        league: league
+                    });
+                }
+            });
+        }
+    });
 });
 router.get('/players', function (req, res) {
     let user = {
@@ -242,24 +279,7 @@ router.post('/createleague', function (req, res) {
         });
     }
 
-    res.redirect('/');
-});
-
-//until fixed
-router.get('/home.html', function (req, res) {
-    res.redirect('/');
-});
-router.get('/players.html', function (req, res) {
-    res.redirect('/players');
-});
-router.get('/team.html', function (req, res) {
-    res.redirect('/team');
-});
-router.get('/login.handlebars', function (req, res) {
-    res.redirect('/login');
-});
-router.get('/league.html', function (req, res) {
-    res.redirect('/league');
+    res.redirect(303, '/');
 });
 
 router.get('/', function (req, res) {
@@ -268,8 +288,29 @@ router.get('/', function (req, res) {
         username: (req.user && req.user.username) ? req.user.username : null
     };
     //console.log(req);
-    res.render('home', {
-        username: user.username
+
+    let userLeagues = [];
+    dbcon.query('select leagueID, leagueName from league where ownerID=?;', [user.username], function (err, rows, cols) {
+        if (err) {
+            next(err);
+        }
+        else {
+            for(let i = 0; i < rows.length; i++) {
+                userLeagues.push({
+                    leagueID: rows[i].leagueID,
+                    leagueName: rows[i].leagueName
+                })
+            }
+            let league = {};
+            if(userLeagues[0]) {
+                league.id = userLeagues[0].leagueID;
+            }
+            res.render('home', {
+                username: user.username,
+                userLeagues: userLeagues,
+                league: league
+            });
+        }
     });
 });
 router.get('/:viewname', function(req,res,next){
