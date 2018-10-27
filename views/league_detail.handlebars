@@ -1,6 +1,6 @@
 <table class="table">
     <thead id="teamName">
-    <h1>{{leagueName}}</h1>
+    <h1>{{league.name}}</h1>
     <tr>
         <th scope="col">#</th>
         <th scope="col">Team Name</th>
@@ -8,7 +8,7 @@
     </tr>
     </thead>
     <tbody>
-        {{#each teams}}
+        {{#each league.teams}}
         <tr>
         <th scope="row">1</th>
         <td>{{teamName}}</td>
@@ -27,4 +27,4 @@
     </tr>
     </tbody>
 </table>
-<a href="invite.html" class="btn btn-primary" id="inviteButton">Invite a Friend</a>
+<a href="#" class="btn btn-primary" id="inviteButton">Invite a Friend</a>

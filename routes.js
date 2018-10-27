@@ -191,13 +191,17 @@ router.get('/league/:id', function(req,res){
         username: (req.user && req.user.username) ? req.user.username : null
     };
 
-    dbcon.query('select leagueName from league where leagueID=?;', [req.params.id], function (err, rows, cols) {
+    
+    let league = { id: req.params.id };
+
+    dbcon.query('select leagueName from league where leagueID=?;', [league.id], function (err, rows, cols) {
         if (err) {
             next(err);
         }
         else {
-            let leagueName = rows[0].leagueName;
-
+            if (rows[0]) {
+                league.name = rows[0].leagueName;
+            }
             dbcon.query('select teamID, username, teamName from team where leagueID=?;', [req.params.id], function (err2, rows, cols) {
                 if (err2) {
                     next(err2);
@@ -211,11 +215,10 @@ router.get('/league/:id', function(req,res){
                             teamName: rows[i].teamName
                         });
                     }
-        
+                    league.teams = teamsInLeague;
                     res.render('league_detail', {
                         username: user.username,
-                        leagueName: leagueName,
-                        teams: teamsInLeague
+                        league: league
                     });
                 }
             });
@@ -276,24 +279,7 @@ router.post('/createleague', function (req, res) {
         });
     }
 
-    res.redirect('/');
-});
-
-//until fixed
-router.get('/home.html', function (req, res) {
-    res.redirect('/');
-});
-router.get('/players.html', function (req, res) {
-    res.redirect('/players');
-});
-router.get('/team.html', function (req, res) {
-    res.redirect('/team');
-});
-router.get('/login.handlebars', function (req, res) {
-    res.redirect('/login');
-});
-router.get('/league.html', function (req, res) {
-    res.redirect('/league');
+    res.redirect(303, '/');
 });
 
 router.get('/', function (req, res) {
@@ -315,10 +301,14 @@ router.get('/', function (req, res) {
                     leagueName: rows[i].leagueName
                 })
             }
-
+            let league = {};
+            if(userLeagues[0]) {
+                league.id = userLeagues[0].leagueID;
+            }
             res.render('home', {
                 username: user.username,
-                userLeagues: userLeagues
+                userLeagues: userLeagues,
+                league: league
             });
         }
     });
