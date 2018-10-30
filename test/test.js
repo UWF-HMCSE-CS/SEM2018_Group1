@@ -7,6 +7,7 @@ describe('mySQLDBMgr', function(){
 	{
 		it('should select all data from user table without error', function(done)
 		{
+			console.log("##teamcity[testSuiteStarted name='login tests']");
 			console.log('##teamcity[testStarted name=\'selecting all from user\']');
 			dbcon.query('select * from user', function(err)
 			{
@@ -69,6 +70,7 @@ describe('mySQLDBMgr', function(){
 			{
 				//console.log(rows[0].username);
 				assert.equal(rows[0].username,  'TestUsername');
+
 				//assert.equals(rows.username,  'TestUsername');
 				if (err) done(err);
 				else done();
@@ -84,6 +86,7 @@ describe('mySQLDBMgr', function(){
 		it('should delete from login withour error', function(done)
 		{
 			console.log('##teamcity[testStarted name=\'deleting user from login\']');
+			console.log("##teamcity[testSuiteFinished name='login tests']");
 			let username = 'TestUsername';
 			 dbcon.query('delete from login where username = ?', [username], function (err, rows, cols)
 			{
