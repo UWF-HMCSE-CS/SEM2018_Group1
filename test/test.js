@@ -3,10 +3,11 @@ let dbcon = require('../lib/mysqlDBMgr.js');
 
 
 describe('mySQLDBMgr', function(){
-	describe('query: select from *', function()
+	describe('query: select * from user', function()
 	{
 		it('should select all data from user table without error', function(done)
 		{
+			console.log('##teamcity[testStarted name=\'selecting all from user\']');
 			dbcon.query('select * from user', function(err)
 			{
 				if (err) done(err);
@@ -19,10 +20,12 @@ describe('mySQLDBMgr', function(){
 
 
 describe('mySQLDBMgr', function(){
-	describe('query: Insert int login', function()
+	describe('query: Insert into login', function()
 	{
 		it('should insert a fields into the database without error', function(done)
 		{
+			
+			console.log('##teamcity[testStarted name=\'insert into login\']');
 			let username = 'TestUsername';
 			let email = 'testEmail@testdomain.com';
 			let password = 'testPassword';
@@ -41,6 +44,7 @@ describe('mySQLDBMgr', function(){
 	{
 		it('should return no values since the password being checked isn\'t encrypted ', function(done)
 		{
+			console.log('##teamcity[testStarted name=\'select a user form login without encrypted password\']');
 			dbcon.query('select * from login where username = ? and password = ?', ['TestUsername', 'testPassword'], function (err, rows, cols)
 			{
 				assert(rows.length < 1);
@@ -57,6 +61,7 @@ describe('mySQLDBMgr', function(){
 	{
 		it('should select the user from login without error', function(done)
 		{
+			console.log('##teamcity[testStarted name=\'selecting from login and checking encrypted password\']');
 			let username = 'TestUsername';
 			let password = 'testPassword';
 			//dbcon.query('insert into login values(?,AES_ENCRYPT(?,?));', [username, password, require('../credentials.js').loginKey], function(err)
@@ -78,6 +83,7 @@ describe('mySQLDBMgr', function(){
 	{
 		it('should delete from login withour error', function(done)
 		{
+			console.log('##teamcity[testStarted name=\'deleting user from login\']');
 			let username = 'TestUsername';
 			 dbcon.query('delete from login where username = ?', [username], function (err, rows, cols)
 			{
