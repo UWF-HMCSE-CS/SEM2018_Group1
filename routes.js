@@ -225,6 +225,49 @@ router.get('/league/:id', function(req,res){
         }
     });
 });
+
+router.get('/invite/:leagueID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+
+    let league = { id: req.params.leagueID };
+
+    if(req.query && req.query.error && req.query.invitedUser) {
+        res.render('invite', {
+            error: true, 
+            username: user.username,
+            league: league,
+            invitedUser: req.query.invitedUser
+        });
+    }
+    else {
+        res.render('invite', {
+            username: user.username,
+            league: league
+        });
+    }
+});
+
+router.post('/sendinvite', function (req, res) {
+    console.log('**************INVITE INFO*****************');
+    console.log(req.body);
+    console.log('**************INVITE INFO*****************');
+    if(req.user && req.body.invitedUser && req.body.leagueID) {
+        let league = { id: req.body.leagueID };
+        dbcon.query(`INSERT INTO invite (leagueID, username) VALUES(?,?);`, [req.body.leagueID, req.body.invitedUser], function (err, rows, cols) {
+            if (!err) {
+                res.redirect(303, '/league/' + league.id);
+            }
+            else {
+                res.redirect(303, '/invite/' + league.id + '?error=1&invitedUser=' + req.body.invitedUser);
+                //res.render('invite', {error: true, invitedUser: req.body.invitedUser, league: league});
+                //next(err);
+            }
+        });
+    }
+});
+
 router.get('/players', function (req, res) {
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
