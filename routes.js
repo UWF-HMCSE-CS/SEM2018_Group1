@@ -290,7 +290,9 @@ router.get('/', function (req, res) {
     //console.log(req);
 
     let userLeagues = [];
-    dbcon.query('select leagueID, leagueName from league where ownerID=?;', [user.username], function (err, rows, cols) {
+    dbcon.query(`SELECT leagueID, leagueName 
+    FROM league
+    WHERE leagueID IN (SELECT leagueID FROM team WHERE username = ?);`, [user.username], function (err, rows, cols) {
         if (err) {
             next(err);
         }
@@ -299,7 +301,7 @@ router.get('/', function (req, res) {
                 userLeagues.push({
                     leagueID: rows[i].leagueID,
                     leagueName: rows[i].leagueName
-                })
+                });
             }
             let league = {};
             if(userLeagues[0]) {
