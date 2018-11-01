@@ -49,16 +49,14 @@
                 </span>
             </a>
         </div>
-        {{/each}}
+        {{else}}
         <div class="card-body">
-            <a href="#" class="list-group-item" id="pendListItem">
+            <a class="list-group-item" id="pendListItem">
                 <span id="testPen"></span>
-                Name of league inviting you
-                <span class="pull-right">
-                    <button class="btn btn-primary" id="joinButton">Join League</button>
-                </span>
+                You have not been invited to any leagues yet!
             </a>
         </div>
+        {{/each}}
     </div>
 
     <script>

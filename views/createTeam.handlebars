@@ -1,0 +1,20 @@
+<div class="w-75 p-3" style="margin:0 auto;text-align: center">
+  <h2 style="margin:0 auto;text-align: center"><strong>Create Your Team</strong></h2>
+  <hr />
+  <form action="/createTeam/{{league.id}}" method="post">
+    <div class="form-group">
+      <label for="newTeamName" class="text-muted">Enter Your Team Name:</label>
+      <input class="form-control" type="text" id="newTeamName" name="newTeamName" required="required" size="30" style="text-align: center">
+      <input type="hidden" id="leagueID" name="leagueID" value="{{league.id}}">
+    </div>
+    <div class="button">
+      <button class="btn btn-primary" type="submit">Create Team</button>
+      {{#if error}}
+      <div class="text-danger">
+        <h5>Error creating team {{newTeamName}} in league ID {{league.id}}</h5>
+        <h5>Your team name should be no more than 50 characters</h5>
+      </div>
+      {{/if}}
+    </div>
+  </form>
+</div>
