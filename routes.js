@@ -225,6 +225,95 @@ router.get('/league/:id', function(req,res){
         }
     });
 });
+
+router.get('/invite/:leagueID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+
+    let league = { id: req.params.leagueID };
+
+    if(req.query && req.query.error && req.query.invitedUser) {
+        res.render('invite', {
+            error: true, 
+            username: user.username,
+            league: league,
+            invitedUser: req.query.invitedUser
+        });
+    }
+    else {
+        res.render('invite', {
+            username: user.username,
+            league: league
+        });
+    }
+});
+
+router.post('/sendinvite', function (req, res) {
+    console.log('**************INVITE INFO*****************');
+    console.log(req.body);
+    console.log('**************INVITE INFO*****************');
+    if(req.user && req.body.invitedUser && req.body.leagueID) {
+        let league = { id: req.body.leagueID };
+        dbcon.query(`INSERT INTO invite (leagueID, username) VALUES(?,?);`, [req.body.leagueID, req.body.invitedUser], function (err, rows, cols) {
+            if (!err) {
+                res.redirect(303, '/league/' + league.id);
+            }
+            else {
+                res.redirect(303, '/invite/' + league.id + '?error=1&invitedUser=' + req.body.invitedUser);
+                //res.render('invite', {error: true, invitedUser: req.body.invitedUser, league: league});
+                //next(err);
+            }
+        });
+    }
+});
+
+router.get('/createTeam/:leagueID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+
+    let league = { id: req.params.leagueID };
+    
+    if(req.query && req.query.error && req.query.newTeamName) {
+        res.render('createTeam', {
+            error: true, 
+            username: user.username,
+            league: league,
+            newTeamName: req.query.newTeamName
+        });
+    }
+    else {
+        res.render('createTeam', {
+            username: user.username,
+            league: league
+        });
+    }
+});
+
+router.post('/createTeam/:leagueID', function (req, res) {
+    if(req.user && req.body.newTeamName && req.body.leagueID) {
+        let league = { id: req.body.leagueID };
+        dbcon.query(`INSERT INTO team (leagueID, username, teamName) VALUES(?,?,?);`, [league.id, req.user.username, req.body.newTeamName], function (err, rows, cols) {
+            if (!err) {
+                dbcon.query(`DELETE FROM invite 
+                WHERE leagueID = ? 
+                AND username = ?;`, [league.id, req.user.username], function (err, rows, cols) {
+                    if(!err) {
+                        res.redirect(303, '/league/' + league.id);
+                    }
+                    else {
+                        res.redirect(303, '/createTeam/' + league.id + '?error=1&newTeamName=' + req.body.newTeamName);
+                    }
+                });
+            }
+            else {
+                res.redirect(303, '/createTeam/' + league.id + '?error=1&newTeamName=' + req.body.newTeamName);
+            }
+        });
+    }
+});
+
 router.get('/players', function (req, res) {
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
@@ -266,6 +355,9 @@ router.post('/createleague', function (req, res) {
                             if (err3) {
                                 next(err3);
                             }
+                            else {
+                                res.redirect(303, '/');
+                            }
                         });
                     }
                     else {
@@ -278,8 +370,6 @@ router.post('/createleague', function (req, res) {
             }
         });
     }
-
-    res.redirect(303, '/');
 });
 
 router.get('/', function (req, res) {
@@ -290,7 +380,9 @@ router.get('/', function (req, res) {
     //console.log(req);
 
     let userLeagues = [];
-    dbcon.query('select leagueID, leagueName from league where ownerID=?;', [user.username], function (err, rows, cols) {
+    dbcon.query(`SELECT leagueID, leagueName 
+    FROM league
+    WHERE leagueID IN (SELECT leagueID FROM team WHERE username = ?);`, [user.username], function (err, rows, cols) {
         if (err) {
             next(err);
         }
@@ -299,16 +391,40 @@ router.get('/', function (req, res) {
                 userLeagues.push({
                     leagueID: rows[i].leagueID,
                     leagueName: rows[i].leagueName
-                })
+                });
             }
             let league = {};
             if(userLeagues[0]) {
                 league.id = userLeagues[0].leagueID;
             }
-            res.render('home', {
-                username: user.username,
-                userLeagues: userLeagues,
-                league: league
+
+            dbcon.query(`SELECT leagueID, leagueName 
+            FROM league
+            WHERE leagueID IN (SELECT leagueID FROM invite WHERE username = ?);`, [user.username], function (err, rows, cols) {
+                if (err) {
+                    res.render('home', {
+                        username: user.username,
+                        userLeagues: userLeagues,
+                        league: league
+                    });
+                }
+                else {
+                    let invites = [];
+                    if (rows[0]) {
+                        for(let i = 0; i < rows.length; i++) {
+                            invites.push({
+                                leagueID: rows[i].leagueID,
+                                leagueName: rows[i].leagueName
+                            });
+                        }
+                    }
+                    res.render('home', {
+                        username: user.username,
+                        userLeagues: userLeagues,
+                        league: league,
+                        invites: invites
+                    });
+                }
             });
         }
     });
