@@ -154,13 +154,13 @@ router.post('/join', function (req, res) {
 
 // If trying to access any page other than join or log in
 // while not logged in, redirect to login page
-router.use(function(req, res, next) {
+/*router.use(function(req, res, next) {
 	if (!req.user) {
 		res.redirect('/login');
 		return;
 	}
 	next();
-});
+});*/
 
 router.get('/set/email/:emailaddress',function(req,res){
     if(req.user) {
