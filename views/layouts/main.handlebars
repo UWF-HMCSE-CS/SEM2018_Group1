@@ -34,14 +34,14 @@
                     <li class="nav-item">
                       {{#if league.id}}
             <a class="nav-link" href="/league/{{league.id}}">League</a>
-            {{/if}}
                     </li>
                     {{#if team.id}}
                     <li class="nav-item">
                       <a class="nav-link" href="/team">Team</a>
                     </li>
+                   {{/if}}
                     <li class="nav-item">
-                      <a class="nav-link" href="/players">Players</a>
+                      <a class="nav-link" href="/players/{{league.id}}">Players</a>
                     </li>
                     {{/if}}
                   </ul>

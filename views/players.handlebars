@@ -1,0 +1,12 @@
+<div class = "w-75 p-3" style="margin:0 auto">
+    <div class="card" id="card1">
+        <h5 class="card-header">Free Agents</h5>
+        <div class="card-body">
+            {{#each players}}
+            <a href="/addplayer/{{../league.id}}/{{playerID}}" class="list-group-item list-group-item-action">{{playername}}</a>
+            {{else}}
+            <h5>There are not currently any free agents</h5>
+            {{/each}}
+        </div>
+    </div>
+</div>

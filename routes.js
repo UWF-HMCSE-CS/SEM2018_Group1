@@ -314,15 +314,69 @@ router.post('/createTeam/:leagueID', function (req, res) {
     }
 });
 
-router.get('/players', function (req, res) {
+// view all players that are "free agents" - not owned by any team in the league
+router.get('/players/:leagueID', function (req, res) {
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
     };
     //console.log(req);
-    res.render('players', {
-        username: user.username
+
+    let league = { id: req.params.leagueID };
+
+    let players = [];
+    dbcon.query(`SELECT *
+    FROM player
+    WHERE NOT EXISTS
+        (SELECT * 
+        FROM player_team
+        WHERE player.playerID = player_team.playerID
+        AND EXISTS 
+            (SELECT *
+            FROM team
+            WHERE leagueID = ?
+            AND team.teamID = player_team.teamID));`, 
+            [league.id], function (err, rows, cols) {
+        if(err) {
+            //console.log('error loading players');
+            res.render('players', {
+                username: user.username,
+                league: league,
+                players: players
+            });
+        }
+        else {
+            //console.log('getting players...');
+            for (let i = 0; i < rows.length; i++) {
+                players.push({
+                    playerID: rows[i].playerID,
+                    playername: rows[i].playername
+                });
+            }
+            //console.log(players);
+
+            res.render('players', {
+                username: user.username,
+                league: league,
+                players: players
+            });
+        }           
     });
 });
+
+// show screen confirming that user can, and wants to, add selected player to their team
+// should prompt user to drop a player if team is full
+router.get('/addplayer/:leagueID/:playerID', function (req, res) {
+    res.redirect(303, '/league/' + req.params.leagueID);
+    /*
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    //console.log(req);
+
+    let league = { id: req.params.leagueID };
+    */
+});
+
 router.get('/team', function (req, res) {
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
