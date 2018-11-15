@@ -72,7 +72,17 @@ passport.deserializeUser(function (username, done) {
 });
 
 app.use(express.static(__dirname + '/public'));
-app.use('/', require(__dirname + '/routes.js'));
+app.use('/api',require(__dirname + '/draftroutes.js'));
+app.use('/', require(__dirname + '/draftroutes.js'));
+app.use('/', function(req,res,next){
+	if (!req.user) {
+		res.redirect('/login');
+		return;
+	}
+	next();
+},require(__dirname + '/routes.js'));
+
+
 
 app.use(function (req, res, next) {
 	var err = new Error('Not Found');
