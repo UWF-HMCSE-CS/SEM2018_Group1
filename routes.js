@@ -377,6 +377,66 @@ router.get('/addplayer/:leagueID/:playerID', function (req, res) {
     */
 });
 
+// view all players on the user's team
+router.get('/myteam/:leagueID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    //console.log(req);
+
+    let league = { id: req.params.leagueID };
+
+    let players = [];
+    dbcon.query(`SELECT playerID, playername
+    FROM player
+    WHERE playerID IN 
+        (SELECT playerID
+        FROM player_team
+        WHERE teamID IN
+            (SELECT teamID
+            FROM team
+            WHERE username = ?));`, 
+            [user.username], function (err, rows, cols) {
+        if(err) {
+            //console.log('error loading myteam');
+            res.render('myteam', {
+                username: user.username,
+                league: league,
+                players: players
+            });
+        }
+        else {
+            //console.log('getting myteam players...');
+            for (let i = 0; i < rows.length; i++) {
+                players.push({
+                    playerID: rows[i].playerID,
+                    playername: rows[i].playername
+                });
+            }
+            //console.log(players);
+
+            res.render('myteam', {
+                username: user.username,
+                league: league,
+                players: players
+            });
+        }           
+    });
+});
+
+// show screen confirming that user can, and wants to, drop selected player from their team
+router.get('/dropplayer/:leagueID/:playerID', function (req, res) {
+    res.redirect(303, '/league/' + req.params.leagueID);
+    /*
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    //console.log(req);
+
+    let league = { id: req.params.leagueID };
+    */
+});
+
 router.get('/team', function (req, res) {
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
