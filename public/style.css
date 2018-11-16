@@ -370,6 +370,8 @@ a:hover {
 
 #teamName {
     text-align:center;
+    background-color: #004C97;
+    color: white;
 }
 
 .bg-light {
@@ -377,7 +379,10 @@ a:hover {
     
 }
 
-
+#leagueDetail {
+    margin-top:20px;
+    
+}
 
 .navbar-brand {
     color: white!important;
@@ -409,7 +414,7 @@ a:hover {
 }
 
 .navbar-nav .nav-link:hover {
-    color: rgb(158, 158, 158)!important;
+    color: rgb(207, 207, 207)!important;
 }
 .nav-link {
     color: white!important;
@@ -450,3 +455,8 @@ a:hover {
     border-right:none;
    
 }
+
+div .card-body {
+    padding: 0px;
+}
+
