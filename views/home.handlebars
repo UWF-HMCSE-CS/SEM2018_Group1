@@ -1,5 +1,5 @@
 <!-- Ideas: Carousel,News, Activity, Account Settings? -->
-	<div id="carousel" class="carousel slide" data-ride="carousel">
+<div id="carousel" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#carousel" data-slide-to="0"></li>
         <li data-target="#carousel" data-slide-to="1"></li>
@@ -24,31 +24,41 @@
     </a>
 </div>
 
-		<div class="entire-panel">
-	    <div class="card" id="card1">
-	        <h5 class="card-header">My Fantasy Leagues</h5>
-	        <div class="card-body">
-	            {{#if leagues}}{{else}}
-	                <a id="display-test1" href="league/{{leagueID}}" class="list-group-item list-group-item-action">League 1</a>
-	                <a id="display-test2" href="league/{{leagueID}}" class="list-group-item list-group-item-action">League 2</a>
-	            {{/if}}
-	            <a href="/league/add" class="btn btn-primary" id="createButton">Create League</a>
-	        </div>
-	    </div>
-	   
-<div class="card" id="pending">
-	        <h5 class="card-header">Pending Invitations</h5>
-	        <div class="card-body">
-    <a href="#" class="list-group-item" id ="pendListItem">
-      <span id="testPen"></span>
-      League 4
-      <span class="pull-right">
-        <button class="btn btn-primary" id="joinButton">Join League</button>
-      </span>
-    </a>
-  </div>
-</div>
+<div class="entire-panel">
+    <div class="card" id="card1">
+        <h5 class="card-header">My Fantasy Leagues</h5>
+        <div class="card-body">
+            {{#each userLeagues}}
+            <a href="league/{{leagueID}}" class="list-group-item list-group-item-action">{{leagueName}}</a>
+            {{else}}
+            <h5>You are not currently in any leagues</h5>
+            {{/each}}
+            <a href="/createleague" class="btn btn-primary" id="createButton">Create League</a>
+        </div>
+    </div>
 
-	<script>
-	    $("#carousel").carousel();
-	</script>
+    <div class="card" id="pending">
+        <h5 class="card-header">Join League</h5>
+        {{#each invites}}
+        <div class="card-body">
+            <a href="createTeam/{{leagueID}}" class="list-group-item" id="pendListItem">
+                <span id="testPen"></span>
+                {{leagueName}}
+                <span class="pull-right">
+                    <button class="btn btn-primary" id="joinButton">Join League</button>
+                </span>
+            </a>
+        </div>
+        {{else}}
+        <div class="card-body">
+            <a class="list-group-item" id="pendListItem">
+                <span id="testPen"></span>
+                You have not been invited to any leagues yet!
+            </a>
+        </div>
+        {{/each}}
+    </div>
+
+    <script>
+        $("#carousel").carousel();
+    </script>

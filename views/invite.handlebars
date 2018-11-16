@@ -1,10 +1,20 @@
-<form action="/invite/invite" method="post">
-  <div>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username">
-    <input type="hidden" id="leagueID" name="leagueID" value="{{league.leagueID}}">
-  </div>
-  <div class="button">
-    <button type="submit">Invite</button>
-  </div>
-</form>
+<div class="w-75 p-3" style="margin:0 auto;text-align: center">
+  <h2 style="margin:0 auto;text-align: center"><strong>Invite a Friend to Your League</strong></h2>
+  <hr />
+  <form action="/sendinvite" method="post">
+    <div class="form-group">
+      <label for="username" class="text-muted">Enter Your Friend's eSports Fantasy Username:</label>
+      <input class="form-control" type="text" id="invitedUser" name="invitedUser" required="required" size="30" style="text-align: center">
+      <input type="hidden" id="leagueID" name="leagueID" value="{{league.id}}">
+    </div>
+    <div class="button">
+      <button class="btn btn-primary" type="submit">Invite</button>
+      {{#if error}}
+      <div class="text-danger">
+        <h5>Error inviting user {{invitedUser}} to league ID {{league.id}}</h5>
+        <h5>Either this user does not have an account, or you have already invited them to this league</h5>
+      </div>
+      {{/if}}
+    </div>
+  </form>
+</div>

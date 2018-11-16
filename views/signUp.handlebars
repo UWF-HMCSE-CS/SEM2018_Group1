@@ -36,7 +36,7 @@
               </dt>
               <dd>
                 <auto-check src="/signup_check/username" csrf="OiuO9nBuQDNx3LYtaUMo1Xmny/KGC+BpjHrVgit38bl0mr6BSm1Ycia9BJunO2koiNlOFCpa/w3H5xNbLORrUQ==">
-                  <input type="text" name="user[login]" id="user[login]" class="form-control form-control-lg input-block" placeholder="Pick a username" autofocus="" autocomplete="off" spellcheck="false" value="{{uname}}" pattern=".{7,}" required="required" title="7 characters minimum">
+                  <input type="text" name="user[login]" id="user[login]" class="form-control form-control-lg input-block" placeholder="Pick a username" autofocus="" autocomplete="off" spellcheck="false" value="{{uname}}" required="required">
                 </auto-check>
               </dd>
             </dl>
@@ -56,7 +56,7 @@
                   <label class="form-label f5" for="user[password]">Password</label>
                 </dt>
                 <dd>
-                  <input type="password" name="user[password]" id="user[password]" class="form-control form-control-lg input-block" placeholder="Create a password" value="{{pword}}" pattern=".{7,}" required="required" title="7 characters minimum">
+                  <input type="password" name="user[password]" id="user[password]" class="form-control form-control-lg input-block" placeholder="Create a password" value="{{pword}}" pattern="(?=.*\d)(?=.*[a-z]).{7,}" required="required" title="7 characters minimum, 1 lowercase, 1 number">
                 </dd>
                 <p class="form-control-note">Make sure it's at least 7 characters, including a number, and a lowercase letter.</p>
               </dl>
@@ -79,7 +79,7 @@
 		<script src="/jquery.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
-	
+
 
 	</body>
 	
