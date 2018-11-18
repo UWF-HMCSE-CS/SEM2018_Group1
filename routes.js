@@ -334,7 +334,7 @@ router.get('/players/:leagueID', function (req, res) {
             (SELECT *
             FROM team
             WHERE leagueID = ?
-            AND team.teamID = player_team.teamID));`, 
+            AND team.teamID = player_team.teamID)) ORDER BY playername;`, 
             [league.id], function (err, rows, cols) {
         if(err) {
             //console.log('error loading players');
@@ -352,8 +352,6 @@ router.get('/players/:leagueID', function (req, res) {
                     playername: rows[i].playername
                 });
             }
-            //sort in alphabetical order by playername
-            players.sort((a,b) => (a.playername > b.playername) ? 1 : ((b.playername > a.playername) ? -1 : 0));
             //console.log(players);
 
             res.render('players', {
