@@ -161,7 +161,63 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
+
+
+
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into invite', function()
+	{
+		it('should insert a fields into the invite table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into invite\']');
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			dbcon.query('insert into invite (leagueID, username) values (?,?);', [leagueID, username], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select invite from invite', function()
+	{
+		it('should return the invite inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select an invite form invite\']');
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			dbcon.query('select * from invite where leagueID = ? and username = ?', [leagueID, username], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].leagueID,  leagueID);
+				assert.equal(rows[0].username,  username);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
 //delete user, also serves to clean up from previous insertions
+describe('mySQLDBMgr', function(){
+	describe('query: delete invite', function()
+	{
+		it('should delete from invite withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting invite from invite\']');
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			 dbcon.query('delete from invite where leagueID = ? and username = ?', [leagueID, username], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
 describe('mySQLDBMgr', function(){
 	describe('query: delete league', function()
 	{
