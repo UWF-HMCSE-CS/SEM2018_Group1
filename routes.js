@@ -495,15 +495,50 @@ router.get('/myteam/:leagueID', function (req, res) {
 
 // show screen confirming that user can, and wants to, drop selected player from their team
 router.get('/dropplayer/:leagueID/:playerID', function (req, res) {
-    res.redirect(303, '/league/' + req.params.leagueID);
-    /*
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
     };
-    //console.log(req);
-
     let league = { id: req.params.leagueID };
-    */
+    let player = { id: req.params.playerID };
+
+   dbcon.query(`SELECT playername FROM player WHERE playerID = ?`, [player.id], function(err, rows, cols) {
+        if(err) {
+            res.redirect(303, '/myteam/' + league.id + '?error=1');
+        }
+        else {
+            player.name = rows[0].playername;
+            res.render('drop_player', {
+                username: user.username,
+                league: league,
+                player: player
+            });
+        }
+    }); 
+});
+
+router.post('/dropplayer/:leagueID/:playerID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    let league = { id: req.params.leagueID };
+    let player = { id: req.params.playerID };
+
+    dbcon.query(`SELECT teamID FROM team WHERE username = ? AND leagueID = ?`, [user.username, league.id], function(err, rows, cols) {
+        if(err) {
+            res.redirect(303, '/myteam/' + league.id + '?error=1');
+        }
+        else {
+            let teamID = rows[0].teamID;
+            dbcon.query(`DELETE FROM player_team WHERE teamID = ? AND playerID = ?`,[teamID, player.id], function(err, rows, cols) {
+                if(err) {
+                    res.redirect(303, '/myteam/' + league.id + '?error=1');
+                }
+                else {
+                    res.redirect(303, '/myteam/' + league.id);
+                }
+            });
+        }
+    });
 });
 
 router.get('/team', function (req, res) {
