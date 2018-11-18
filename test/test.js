@@ -79,9 +79,61 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into user', function()
+	{
+		it('should insert a fields into the user table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into user\']');
+			let username = 'TestUsername';
+			let email = 'testEmail@testdomain.com';
+			dbcon.query('insert into user (username, email) values(?,?);', [username, email], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select user from user', function()
+	{
+		it('should return the user inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select a user form user\']');
+			let username = 'TestUsername';
+			let email = 'testEmail@testdomain.com';
+			dbcon.query('select * from user where username = ? and email = ?', [username, email], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].username,  username);
+				assert.equal(rows[0].email,  email);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
 //delete user, also serves to clean up from previous insertions
 describe('mySQLDBMgr', function(){
-	describe('query: delete user', function()
+	describe('query: delete user from user', function()
+	{
+		it('should delete from user withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting user from user\']');
+			let username = 'TestUsername';
+			 dbcon.query('delete from user where username = ?', [username], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+describe('mySQLDBMgr', function(){
+	describe('query: delete user from login', function()
 	{
 		it('should delete from login withour error', function(done)
 		{
