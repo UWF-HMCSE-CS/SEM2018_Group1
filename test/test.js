@@ -116,7 +116,67 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
+
+
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into league', function()
+	{
+		it('should insert a fields into the league table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into league\']');
+			let leagueID = 9999;
+			let ownerID = 'TestUsername';
+			let leagueName = 'TestLeagueName';
+			let players_per_team = 2;
+			dbcon.query('insert into league (leagueID, ownerID, leagueName, players_per_team) values (?,?,?,?);', [leagueID, ownerID, leagueName, players_per_team], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select league from league', function()
+	{
+		it('should return the league inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select a league form league\']');
+			let leagueID = 9999;
+			let ownerID = 'TestUsername';
+			let leagueName = 'TestLeagueName';
+			let players_per_team = 2;
+			dbcon.query('select * from league where leagueID = ?', [leagueID], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].leagueID,  leagueID);
+				assert.equal(rows[0].ownerID,  ownerID);
+				assert.equal(rows[0].leagueName,  leagueName);
+				assert.equal(rows[0].players_per_team,  players_per_team);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
 //delete user, also serves to clean up from previous insertions
+describe('mySQLDBMgr', function(){
+	describe('query: delete league', function()
+	{
+		it('should delete from league withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting league from league\']');
+			let leagueID = 9999;
+			 dbcon.query('delete from league where leagueID = ?', [leagueID], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
 describe('mySQLDBMgr', function(){
 	describe('query: delete user from user', function()
 	{
