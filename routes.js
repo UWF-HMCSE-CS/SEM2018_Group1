@@ -352,6 +352,8 @@ router.get('/players/:leagueID', function (req, res) {
                     playername: rows[i].playername
                 });
             }
+            //sort in alphabetical order by playername
+            players.sort((a,b) => (a.playername > b.playername) ? 1 : ((b.playername > a.playername) ? -1 : 0));
             //console.log(players);
 
             res.render('players', {
@@ -386,41 +388,59 @@ router.get('/myteam/:leagueID', function (req, res) {
 
     let league = { id: req.params.leagueID };
 
+    let teamName = "asdf";
     let players = [];
-    dbcon.query(`SELECT playerID, playername
-    FROM player
-    WHERE playerID IN 
-        (SELECT playerID
-        FROM player_team
-        WHERE teamID IN
-            (SELECT teamID
-            FROM team
-            WHERE username = ?));`, 
-            [user.username], function (err, rows, cols) {
+    dbcon.query(`SELECT teamName FROM team WHERE leagueID = ? AND username = ?`,[league.id, user.username], function(err, rows, cols) {
         if(err) {
-            //console.log('error loading myteam');
+            //console.log('error loading teamName');
             res.render('myteam', {
                 username: user.username,
                 league: league,
+                teamName: teamName,
                 players: players
             });
         }
         else {
-            //console.log('getting myteam players...');
-            for (let i = 0; i < rows.length; i++) {
-                players.push({
-                    playerID: rows[i].playerID,
-                    playername: rows[i].playername
-                });
-            }
-            //console.log(players);
+            if(rows && rows[0]) { teamName = rows[0].teamName }
+            
+            dbcon.query(`SELECT playerID, playername
+            FROM player
+            WHERE playerID IN 
+                (SELECT playerID
+                FROM player_team
+                WHERE teamID IN
+                    (SELECT teamID
+                    FROM team
+                    WHERE username = ?));`, 
+                    [user.username], function (err, rows, cols) {
+                if(err) {
+                    //console.log('error loading myteam');
+                    res.render('myteam', {
+                        username: user.username,
+                        league: league,
+                        teamName: teamName,
+                        players: players
+                    });
+                }
+                else {
+                    //console.log('getting myteam players...');
+                    for (let i = 0; i < rows.length; i++) {
+                        players.push({
+                            playerID: rows[i].playerID,
+                            playername: rows[i].playername
+                        });
+                    }
+                    //console.log(players);
 
-            res.render('myteam', {
-                username: user.username,
-                league: league,
-                players: players
+                    res.render('myteam', {
+                        username: user.username,
+                        league: league,
+                        teamName: teamName,
+                        players: players
+                    });
+                }           
             });
-        }           
+        }
     });
 });
 

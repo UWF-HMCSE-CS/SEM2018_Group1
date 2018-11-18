@@ -1,15 +1,12 @@
 <div class="w-75 p-3" style="margin:0 auto">
     <div class="card" id="card1">
-        <h5 class="card-header">My Team (Team Name Here)</h5>
+        <h5 class="card-header">{{teamName}}</h5>
         <div class="card-body">
             {{#each players}}
             <a href="#" class="list-group-item list-group-item-action">{{playername}}</a>
-            <a href="/dropplayer/{{../league.id}}/{{playerID}}" style="display:block;
-width:188.51px;
-background-color:gray;
-text-align:center;
-padding:4px;
-text-decoration:none;">Drop Player</a>
+            <a href="/dropplayer/{{../league.id}}/{{playerID}}" 
+            style="display:block; width:188.51px; background-color:gray; text-align:center; padding:4px; text-decoration:none;">
+            Drop Player</a>
             <hr />
             <hr />
             <hr />
