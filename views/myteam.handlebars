@@ -1,18 +1,18 @@
 <div class="w-75 p-3" style="margin:0 auto">
     <div class="card" id="card1">
         <h5 class="card-header">{{teamName}}</h5>
-        <div class="card-body">
-            {{#each players}}
-            <a href="#" class="list-group-item list-group-item-action">{{playername}}</a>
-            <a href="/dropplayer/{{../league.id}}/{{playerID}}" 
-            style="display:block; width:188.51px; background-color:gray; text-align:center; padding:4px; text-decoration:none;">
-            Drop Player</a>
-            <hr />
-            <hr />
-            <hr />
-            {{else}}
+        {{#each players}}
+            <div class="card-body">
+                <a href="#" class="list-group-item list-group-item-action">{{playername}}</a>
+                <a href="/dropplayer/{{../league.id}}/{{playerID}}" 
+                style="display:block; width:188.51px; background-color:gray; text-align:center; padding:4px; text-decoration:none;">
+                Drop Player</a>
+                <br />
+                <hr />
+                <br />
+            </div>
+        {{else}}
             <h5>You do not currently have any players on your team</h5>
-            {{/each}}
-        </div>
+        {{/each}}
     </div>
 </div>
