@@ -18,8 +18,6 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
-
-
 describe('mySQLDBMgr', function(){
 	describe('query: Insert into login', function()
 	{
@@ -116,8 +114,6 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
-
-
 describe('mySQLDBMgr', function(){
 	describe('query: Insert into league', function()
 	{
@@ -161,9 +157,6 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
-
-
-
 describe('mySQLDBMgr', function(){
 	describe('query: Insert into invite', function()
 	{
@@ -201,7 +194,68 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into team', function()
+	{
+		it('should insert a fields into the team table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into team\']');
+			let teamID = 999;
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			let teamName = 'TestTeamName';
+			dbcon.query('insert into team (teamID, leagueID, username, teamName) values (?,?,?,?);', [teamID, leagueID, username, teamName], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select team from team', function()
+	{
+		it('should return the team inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select a team form team\']');
+			let teamID = 999;
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			let teamName = 'TestTeamName';
+			dbcon.query('select * from team where teamID = ?', [teamID], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].teamID,  teamID);
+				assert.equal(rows[0].leagueID,  leagueID);
+				assert.equal(rows[0].username,  username);
+				assert.equal(rows[0].teamName,  teamName);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
 //delete user, also serves to clean up from previous insertions
+describe('mySQLDBMgr', function(){
+	describe('query: delete team', function()
+	{
+		it('should delete from team withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting team from team\']');
+			let teamID = 999;
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			let teamName = 'TestTeamName';
+			 dbcon.query('delete from team where teamID = ?', [teamID], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
 describe('mySQLDBMgr', function(){
 	describe('query: delete invite', function()
 	{
