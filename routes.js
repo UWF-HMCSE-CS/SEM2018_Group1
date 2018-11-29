@@ -318,15 +318,231 @@ router.post('/createTeam/:leagueID', function (req, res) {
     }
 });
 
-router.get('/players', function (req, res) {
+// view all players that are "free agents" - not owned by any team in the league
+router.get('/players/:leagueID', function (req, res) {
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
     };
     //console.log(req);
-    res.render('players', {
-        username: user.username
+
+    let league = { id: req.params.leagueID };
+
+    let players = [];
+    dbcon.query(`SELECT *
+    FROM player
+    WHERE NOT EXISTS
+        (SELECT * 
+        FROM player_team
+        WHERE player.playerID = player_team.playerID
+        AND EXISTS 
+            (SELECT *
+            FROM team
+            WHERE leagueID = ?
+            AND team.teamID = player_team.teamID)) ORDER BY playername;`, 
+            [league.id], function (err, rows, cols) {
+        if(err) {
+            //console.log('error loading players');
+            res.render('players', {
+                username: user.username,
+                league: league,
+                players: players
+            });
+        }
+        else {
+            //console.log('getting players...');
+            for (let i = 0; i < rows.length; i++) {
+                players.push({
+                    playerID: rows[i].playerID,
+                    playername: rows[i].playername
+                });
+            }
+            //console.log(players);
+
+            res.render('players', {
+                username: user.username,
+                league: league,
+                players: players
+            });
+        }           
     });
 });
+
+// show screen confirming that user can, and wants to, add selected player to their team
+// should prompt user to drop a player if team is full
+router.get('/addplayer/:leagueID/:playerID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    let league = { id: req.params.leagueID };
+    let player = { id: req.params.playerID };
+
+    dbcon.query(`SELECT IF((SELECT COUNT(playerID) FROM player_team WHERE teamID = (SELECT teamID FROM team WHERE username = ? AND leagueID = ?)) < 
+    (SELECT players_per_team FROM league WHERE leagueID = ?),'roster spot available','roster full') AS 'is_roster_full';`,
+    [user.username, league.id, league.id], function(err, rows, cols) {
+        if(err) {
+            res.redirect(303, '/myteam/' + league.id);
+        }
+        else {
+            if(rows[0].is_roster_full === 'roster spot available') { 
+                dbcon.query(`SELECT playername FROM player WHERE playerID = ?`, [player.id], function(err, rows, cols) {
+                    if(err) {
+                        res.redirect(303, '/myteam/' + league.id);
+                    }
+                    else {
+                        player.name = rows[0].playername;
+                        res.render('add_player', {
+                            username: user.username,
+                            league: league,
+                            player: player
+                        });
+                    }
+                });       
+            }
+            else {
+                res.redirect(303, '/myteam/' + league.id);
+            }
+        }
+    });
+});
+
+router.post('/addplayer/:leagueID/:playerID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    let league = { id: req.params.leagueID };
+    let player = { id: req.params.playerID };
+
+    dbcon.query(`SELECT teamID FROM team WHERE username = ? AND leagueID = ?`, [user.username, league.id], function(err, rows, cols) {
+        if(err) {
+            res.redirect(303, '/myteam/' + league.id);
+        }
+        else {
+            let teamID = rows[0].teamID;
+            dbcon.query(`INSERT INTO player_team (teamID, playerID) VALUES(?,?)`,[teamID, player.id], function(err, rows, cols) {
+                if(err) {
+                    res.redirect(303, '/myteam/' + league.id + '?error=1');
+                }
+                else {
+                    res.redirect(303, '/myteam/' + league.id);
+                }
+            });
+        }
+    });
+});
+
+// view all players on the user's team
+router.get('/myteam/:leagueID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    //console.log(req);
+
+    let league = { id: req.params.leagueID };
+
+    let teamName = "asdf";
+    let players = [];
+    dbcon.query(`SELECT teamName FROM team WHERE leagueID = ? AND username = ?`,[league.id, user.username], function(err, rows, cols) {
+        if(err) {
+            //console.log('error loading teamName');
+            res.render('myteam', {
+                username: user.username,
+                league: league,
+                teamName: teamName,
+                players: players
+            });
+        }
+        else {
+            if(rows && rows[0]) { teamName = rows[0].teamName }
+
+            dbcon.query(`SELECT playerID, playername
+            FROM player
+            WHERE playerID IN 
+                (SELECT playerID
+                FROM player_team
+                WHERE teamID IN
+                    (SELECT teamID
+                    FROM team
+                    WHERE username = ?));`, 
+                    [user.username], function (err, rows, cols) {
+                if(err) {
+                    //console.log('error loading myteam');
+                    res.render('myteam', {
+                        username: user.username,
+                        league: league,
+                        teamName: teamName,
+                        players: players
+                    });
+                }
+                else {
+                    //console.log('getting myteam players...');
+                    for (let i = 0; i < rows.length; i++) {
+                        players.push({
+                            playerID: rows[i].playerID,
+                            playername: rows[i].playername
+                        });
+                    }
+                    //console.log(players);
+
+                    res.render('myteam', {
+                        username: user.username,
+                        league: league,
+                        teamName: teamName,
+                        players: players
+                    });
+                }           
+            });
+        }
+    });
+});
+
+// show screen confirming that user can, and wants to, drop selected player from their team
+router.get('/dropplayer/:leagueID/:playerID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    let league = { id: req.params.leagueID };
+    let player = { id: req.params.playerID };
+
+   dbcon.query(`SELECT playername FROM player WHERE playerID = ?`, [player.id], function(err, rows, cols) {
+        if(err) {
+            res.redirect(303, '/myteam/' + league.id + '?error=1');
+        }
+        else {
+            player.name = rows[0].playername;
+            res.render('drop_player', {
+                username: user.username,
+                league: league,
+                player: player
+            });
+        }
+    }); 
+});
+
+router.post('/dropplayer/:leagueID/:playerID', function (req, res) {
+    let user = {
+        username: (req.user && req.user.username) ? req.user.username : null
+    };
+    let league = { id: req.params.leagueID };
+    let player = { id: req.params.playerID };
+
+    dbcon.query(`SELECT teamID FROM team WHERE username = ? AND leagueID = ?`, [user.username, league.id], function(err, rows, cols) {
+        if(err) {
+            res.redirect(303, '/myteam/' + league.id + '?error=1');
+        }
+        else {
+            let teamID = rows[0].teamID;
+            dbcon.query(`DELETE FROM player_team WHERE teamID = ? AND playerID = ?`,[teamID, player.id], function(err, rows, cols) {
+                if(err) {
+                    res.redirect(303, '/myteam/' + league.id + '?error=1');
+                }
+                else {
+                    res.redirect(303, '/myteam/' + league.id);
+                }
+            });
+        }
+    });
+});
+
 router.get('/team', function (req, res) {
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null

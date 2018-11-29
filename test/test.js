@@ -18,8 +18,6 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
-
-
 describe('mySQLDBMgr', function(){
 	describe('query: Insert into login', function()
 	{
@@ -79,9 +77,339 @@ describe('mySQLDBMgr', function(){
 	});
 });
 
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into user', function()
+	{
+		it('should insert a fields into the user table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into user\']');
+			let username = 'TestUsername';
+			let email = 'testEmail@testdomain.com';
+			dbcon.query('insert into user (username, email) values(?,?);', [username, email], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select user from user', function()
+	{
+		it('should return the user inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select a user form user\']');
+			let username = 'TestUsername';
+			let email = 'testEmail@testdomain.com';
+			dbcon.query('select * from user where username = ? and email = ?', [username, email], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].username,  username);
+				assert.equal(rows[0].email,  email);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into league', function()
+	{
+		it('should insert a fields into the league table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into league\']');
+			let leagueID = 9999;
+			let ownerID = 'TestUsername';
+			let leagueName = 'TestLeagueName';
+			let players_per_team = 2;
+			dbcon.query('insert into league (leagueID, ownerID, leagueName, players_per_team) values (?,?,?,?);', [leagueID, ownerID, leagueName, players_per_team], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select league from league', function()
+	{
+		it('should return the league inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select a league form league\']');
+			let leagueID = 9999;
+			let ownerID = 'TestUsername';
+			let leagueName = 'TestLeagueName';
+			let players_per_team = 2;
+			dbcon.query('select * from league where leagueID = ?', [leagueID], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].leagueID,  leagueID);
+				assert.equal(rows[0].ownerID,  ownerID);
+				assert.equal(rows[0].leagueName,  leagueName);
+				assert.equal(rows[0].players_per_team,  players_per_team);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into invite', function()
+	{
+		it('should insert a fields into the invite table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into invite\']');
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			dbcon.query('insert into invite (leagueID, username) values (?,?);', [leagueID, username], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select invite from invite', function()
+	{
+		it('should return the invite inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select an invite form invite\']');
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			dbcon.query('select * from invite where leagueID = ? and username = ?', [leagueID, username], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].leagueID,  leagueID);
+				assert.equal(rows[0].username,  username);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into team', function()
+	{
+		it('should insert a fields into the team table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into team\']');
+			let teamID = 999;
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			let teamName = 'TestTeamName';
+			dbcon.query('insert into team (teamID, leagueID, username, teamName) values (?,?,?,?);', [teamID, leagueID, username, teamName], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select team from team', function()
+	{
+		it('should return the team inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select a team form team\']');
+			let teamID = 999;
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			let teamName = 'TestTeamName';
+			dbcon.query('select * from team where teamID = ?', [teamID], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].teamID,  teamID);
+				assert.equal(rows[0].leagueID,  leagueID);
+				assert.equal(rows[0].username,  username);
+				assert.equal(rows[0].teamName,  teamName);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into player', function()
+	{
+		it('should insert a fields into the player table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into player\']');
+			let playerID = 99;
+			let playername = 'TestPlayerName';
+			dbcon.query('insert into player (playerID, playername) values (?,?);', [playerID, playername], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select player from player', function()
+	{
+		it('should return the player inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select a player form player\']');
+			let playerID = 99;
+			let playername = 'TestPlayerName';
+			dbcon.query('select * from player where playerID = ?', [playerID], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].playerID,  playerID);
+				assert.equal(rows[0].playername,  playername);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: Insert into player_team', function()
+	{
+		it('should insert a fields into the player_team table without error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'insert into player_team\']');
+			let teamID = 999;
+			let playerID = 99;
+			dbcon.query('insert into player_team (teamID, playerID) values (?,?);', [teamID, playerID], function(err)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+
+describe('mySQLDBMgr', function(){
+	describe('query: select player_team from player_team', function()
+	{
+		it('should return the player_team inserted in the table ', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'select a player_team form player_team\']');
+			let teamID = 999;
+			let playerID = 99;
+			dbcon.query('select * from player_team where teamID = ? and playerID = ?', [teamID, playerID], function (err, rows, cols)
+			{
+				console.log(rows);
+				assert.equal(rows[0].teamID,  teamID);
+				assert.equal(rows[0].playerID,  playerID);
+				if (err)  done(err);
+				else done();
+			});
+		});
+	});
+});
+
 //delete user, also serves to clean up from previous insertions
 describe('mySQLDBMgr', function(){
-	describe('query: delete user', function()
+	describe('query: delete player_team', function()
+	{
+		it('should delete from player_team withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting player_team from player_team\']');
+			let teamID = 999;
+			let playerID = 99;
+			 dbcon.query('delete from player_team where teamID = ? and playerID = ?', [teamID, playerID], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+describe('mySQLDBMgr', function(){
+	describe('query: delete player', function()
+	{
+		it('should delete from player withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting player from player\']');
+			let playerID = 99;
+			let playername = 'TestPlayerName';
+			 dbcon.query('delete from player where playerID = ?', [playerID], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+describe('mySQLDBMgr', function(){
+	describe('query: delete team', function()
+	{
+		it('should delete from team withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting team from team\']');
+			let teamID = 999;
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			let teamName = 'TestTeamName';
+			 dbcon.query('delete from team where teamID = ?', [teamID], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+describe('mySQLDBMgr', function(){
+	describe('query: delete invite', function()
+	{
+		it('should delete from invite withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting invite from invite\']');
+			let leagueID = 9999;
+			let username = 'TestUsername';
+			 dbcon.query('delete from invite where leagueID = ? and username = ?', [leagueID, username], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+describe('mySQLDBMgr', function(){
+	describe('query: delete league', function()
+	{
+		it('should delete from league withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting league from league\']');
+			let leagueID = 9999;
+			 dbcon.query('delete from league where leagueID = ?', [leagueID], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+describe('mySQLDBMgr', function(){
+	describe('query: delete user from user', function()
+	{
+		it('should delete from user withour error', function(done)
+		{
+			console.log('##teamcity[testStarted name=\'deleting user from user\']');
+			let username = 'TestUsername';
+			 dbcon.query('delete from user where username = ?', [username], function (err, rows, cols)
+			{
+				if (err) done(err);
+				else done();
+			});
+		});
+	});
+});
+describe('mySQLDBMgr', function(){
+	describe('query: delete user from login', function()
 	{
 		it('should delete from login withour error', function(done)
 		{
