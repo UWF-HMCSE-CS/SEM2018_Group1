@@ -3,7 +3,7 @@ let router = require('express').Router();
 let request = require("request");
 let dbcon = require(__dirname + '/lib/mysqlDBMgr.js');
 
-router.post('/league/addplayer',function(req,res,next){
+router.post('/league/addtournamentdata',function(req,res,next){
 	if(
 		req.user.username
 		&& req.body.leagueID
@@ -13,6 +13,11 @@ router.post('/league/addplayer',function(req,res,next){
 		console.log('insert into [databasetablenamehere](leagueID,playerName) values (?,?);\n[\n' + req.body.leagueID + ',\n' + req.body.playerName + '\n]');
 	}
 });
+
+
+
+
+
 
 let updatePlayerFunction_RECURSIVE = function(remaining,original,playerContent){
 	if(remaining > 0) console.log("[" + (original-remaining) + "] Player ID: " + playerContent[(original-remaining)].id + " Player Name: " + playerContent[(original-remaining)].name );
