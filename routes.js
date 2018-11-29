@@ -3,10 +3,14 @@ let router = require('express').Router();
 let request = require("request");
 let dbcon = require(__dirname + '/lib/mysqlDBMgr.js');
 
-
+router.get('*', function(req,res,next){
+	if (!req.user) {
+		return res.redirect('/login');
+	}else next();
+})
 router.get('/logout', function (req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('/login');
 });
 router.get('/login', function (req, res) {
     console.log(req.user);
