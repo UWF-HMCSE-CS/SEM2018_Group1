@@ -3,14 +3,10 @@ let router = require('express').Router();
 let request = require("request");
 let dbcon = require(__dirname + '/lib/mysqlDBMgr.js');
 
-router.get('*', function(req,res,next){
-	if (!req.user) {
-		return res.redirect('/login');
-	}else next();
-})
+
 router.get('/logout', function (req, res) {
     req.logout();
-    res.redirect('/login');
+    res.redirect('/');
 });
 router.get('/login', function (req, res) {
     console.log(req.user);
@@ -34,7 +30,7 @@ router.post('/login', function (req, res) {
         //req.body.username
         //req.body.password
         console.log(passport);
-        console.log(passport._strategies.local._verify(req.body.username, req.body.password, function (item1, item2) {
+        console.log(passport._strategies.local. _verify(req.body.username, req.body.password, function (item1, item2) {
 
         }));
         let test = function (username, password, done) {
@@ -42,7 +38,7 @@ router.post('/login', function (req, res) {
             console.log("inside passport strat");
             dbcon.query('select * from login where username = ? and password = AES_Encrypt(?,?);',[username,password,require(__dirname + '/credentials.js').loginKey], function(err,rows,cols){
                 console.log('login?: ' + rows);
-                if(!err && rows && rows[0]){
+                if(!err && rows && rows[0]){ 
                     console.log("Success?");
                     return done(null, rows[0]);
                 }else {
@@ -158,13 +154,13 @@ router.post('/join', function (req, res) {
 
 // If trying to access any page other than join or log in
 // while not logged in, redirect to login page
-/*router.use(function(req, res, next) {
+router.use(function(req, res, next) {
 	if (!req.user) {
 		res.redirect('/login');
 		return;
 	}
 	next();
-});*/
+});
 
 router.get('/set/email/:emailaddress',function(req,res){
     if(req.user) {
@@ -338,7 +334,7 @@ router.get('/players/:leagueID', function (req, res) {
             (SELECT *
             FROM team
             WHERE leagueID = ?
-            AND team.teamID = player_team.teamID)) ORDER BY playername;`, 
+            AND team.teamID = player_team.teamID));`, 
             [league.id], function (err, rows, cols) {
         if(err) {
             //console.log('error loading players');
@@ -370,64 +366,15 @@ router.get('/players/:leagueID', function (req, res) {
 // show screen confirming that user can, and wants to, add selected player to their team
 // should prompt user to drop a player if team is full
 router.get('/addplayer/:leagueID/:playerID', function (req, res) {
+    res.redirect(303, '/league/' + req.params.leagueID);
+    /*
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
     };
+    //console.log(req);
+
     let league = { id: req.params.leagueID };
-    let player = { id: req.params.playerID };
-
-    dbcon.query(`SELECT IF((SELECT COUNT(playerID) FROM player_team WHERE teamID = (SELECT teamID FROM team WHERE username = ? AND leagueID = ?)) < 
-    (SELECT players_per_team FROM league WHERE leagueID = ?),'roster spot available','roster full') AS 'is_roster_full';`,
-    [user.username, league.id, league.id], function(err, rows, cols) {
-        if(err) {
-            res.redirect(303, '/myteam/' + league.id);
-        }
-        else {
-            if(rows[0].is_roster_full === 'roster spot available') { 
-                dbcon.query(`SELECT playername FROM player WHERE playerID = ?`, [player.id], function(err, rows, cols) {
-                    if(err) {
-                        res.redirect(303, '/myteam/' + league.id);
-                    }
-                    else {
-                        player.name = rows[0].playername;
-                        res.render('add_player', {
-                            username: user.username,
-                            league: league,
-                            player: player
-                        });
-                    }
-                });       
-            }
-            else {
-                res.redirect(303, '/myteam/' + league.id);
-            }
-        }
-    });
-});
-
-router.post('/addplayer/:leagueID/:playerID', function (req, res) {
-    let user = {
-        username: (req.user && req.user.username) ? req.user.username : null
-    };
-    let league = { id: req.params.leagueID };
-    let player = { id: req.params.playerID };
-
-    dbcon.query(`SELECT teamID FROM team WHERE username = ? AND leagueID = ?`, [user.username, league.id], function(err, rows, cols) {
-        if(err) {
-            res.redirect(303, '/myteam/' + league.id);
-        }
-        else {
-            let teamID = rows[0].teamID;
-            dbcon.query(`INSERT INTO player_team (teamID, playerID) VALUES(?,?)`,[teamID, player.id], function(err, rows, cols) {
-                if(err) {
-                    res.redirect(303, '/myteam/' + league.id + '?error=1');
-                }
-                else {
-                    res.redirect(303, '/myteam/' + league.id);
-                }
-            });
-        }
-    });
+    */
 });
 
 // view all players on the user's team
@@ -439,108 +386,55 @@ router.get('/myteam/:leagueID', function (req, res) {
 
     let league = { id: req.params.leagueID };
 
-    let teamName = "asdf";
     let players = [];
-    dbcon.query(`SELECT teamName FROM team WHERE leagueID = ? AND username = ?`,[league.id, user.username], function(err, rows, cols) {
+    dbcon.query(`SELECT playerID, playername
+    FROM player
+    WHERE playerID IN 
+        (SELECT playerID
+        FROM player_team
+        WHERE teamID IN
+            (SELECT teamID
+            FROM team
+            WHERE username = ?));`, 
+            [user.username], function (err, rows, cols) {
         if(err) {
-            //console.log('error loading teamName');
+            //console.log('error loading myteam');
             res.render('myteam', {
                 username: user.username,
                 league: league,
-                teamName: teamName,
                 players: players
             });
         }
         else {
-            if(rows && rows[0]) { teamName = rows[0].teamName }
+            //console.log('getting myteam players...');
+            for (let i = 0; i < rows.length; i++) {
+                players.push({
+                    playerID: rows[i].playerID,
+                    playername: rows[i].playername
+                });
+            }
+            //console.log(players);
 
-            dbcon.query(`SELECT playerID, playername
-            FROM player
-            WHERE playerID IN 
-                (SELECT playerID
-                FROM player_team
-                WHERE teamID IN
-                    (SELECT teamID
-                    FROM team
-                    WHERE username = ?));`, 
-                    [user.username], function (err, rows, cols) {
-                if(err) {
-                    //console.log('error loading myteam');
-                    res.render('myteam', {
-                        username: user.username,
-                        league: league,
-                        teamName: teamName,
-                        players: players
-                    });
-                }
-                else {
-                    //console.log('getting myteam players...');
-                    for (let i = 0; i < rows.length; i++) {
-                        players.push({
-                            playerID: rows[i].playerID,
-                            playername: rows[i].playername
-                        });
-                    }
-                    //console.log(players);
-
-                    res.render('myteam', {
-                        username: user.username,
-                        league: league,
-                        teamName: teamName,
-                        players: players
-                    });
-                }           
+            res.render('myteam', {
+                username: user.username,
+                league: league,
+                players: players
             });
-        }
+        }           
     });
 });
 
 // show screen confirming that user can, and wants to, drop selected player from their team
 router.get('/dropplayer/:leagueID/:playerID', function (req, res) {
+    res.redirect(303, '/league/' + req.params.leagueID);
+    /*
     let user = {
         username: (req.user && req.user.username) ? req.user.username : null
     };
+    //console.log(req);
+
     let league = { id: req.params.leagueID };
-    let player = { id: req.params.playerID };
-
-   dbcon.query(`SELECT playername FROM player WHERE playerID = ?`, [player.id], function(err, rows, cols) {
-        if(err) {
-            res.redirect(303, '/myteam/' + league.id + '?error=1');
-        }
-        else {
-            player.name = rows[0].playername;
-            res.render('drop_player', {
-                username: user.username,
-                league: league,
-                player: player
-            });
-        }
-    }); 
-});
-
-router.post('/dropplayer/:leagueID/:playerID', function (req, res) {
-    let user = {
-        username: (req.user && req.user.username) ? req.user.username : null
-    };
-    let league = { id: req.params.leagueID };
-    let player = { id: req.params.playerID };
-
-    dbcon.query(`SELECT teamID FROM team WHERE username = ? AND leagueID = ?`, [user.username, league.id], function(err, rows, cols) {
-        if(err) {
-            res.redirect(303, '/myteam/' + league.id + '?error=1');
-        }
-        else {
-            let teamID = rows[0].teamID;
-            dbcon.query(`DELETE FROM player_team WHERE teamID = ? AND playerID = ?`,[teamID, player.id], function(err, rows, cols) {
-                if(err) {
-                    res.redirect(303, '/myteam/' + league.id + '?error=1');
-                }
-                else {
-                    res.redirect(303, '/myteam/' + league.id);
-                }
-            });
-        }
-    });
+    */
 });
 
 router.get('/team', function (req, res) {
