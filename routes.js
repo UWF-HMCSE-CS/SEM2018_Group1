@@ -314,6 +314,8 @@ router.post('/createTeam/:leagueID', function (req, res) {
     }
 });
 
+router.get('/draft/:leagueID', require('./draft/draftRoute.js')({ dbcon :dbcon }));
+
 // view all players that are "free agents" - not owned by any team in the league
 router.get('/players/:leagueID', function (req, res) {
     let user = {

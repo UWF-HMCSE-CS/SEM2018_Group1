@@ -1,0 +1,166 @@
+{{#if error}}
+<h2>{{error}}</h2>
+{{else}}
+<div id="draft">
+    <h1 id="draftHeader">ON THE CLOCK:</h1>
+    <div id="countdown">
+        <div id='tiles'></div>
+        <div class="labels">
+            <li>Mins</li>
+            <li>Secs</li>
+        </div>
+    </div>
+</div>
+
+<p></p>
+
+<form class="center">
+    <div class="row center" style="width:75%">
+        <div class="col">
+            <select class="custom-select custom-select-lg mb-3 center">
+                <option selected>Select a Player...</option>
+                {{#each allPlayers}}
+                <option value="{{playerID}}">{{playername}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col" style="text-align: left">
+            <button style="width:100%" type="submit" class="btn btn-primary mb-2">DRAFT</button>
+        </div>
+    </div>
+    <h5>When you are on the clock, select an available player, and then click DRAFT</h5>
+    <hr />
+</form>
+
+<div class="row">
+    <div class="column center">
+        <h4>My Team - "{{myTeam.teamName}}"</h4>
+        <table class="table table-hover center" style="width:auto">
+            <thead>
+                <tr class="table-secondary">
+                    <th scope="col">Pick #</th>
+                    <th scope="col">Player</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each myTeam.picks}}
+                <tr>
+                    <th scope="row">{{pickNum}}</th>
+                    <td>{{playername}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div class="column">
+        <h5>All Draft Picks</h5>
+        <table class="table table-sm table-hover" style="width:auto">
+            <thead>
+                <tr class="table-secondary">
+                    <th scope="col">Pick #</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Player</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each draftOrder}}
+                <tr>
+                    <th scope="row">{{pickNum}}</th>
+                    <td>{{team.teamName}}</td>
+                    <td>{{playername}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function main() {
+        var target_date = new Date().getTime() + (1000 * 60); // set the countdown date
+        var minutes, seconds; // variables for time units
+        var countdown = document.getElementById("tiles"); // get tag element
+        if (getCountdown() == 0) return;
+        setInterval(function () { getCountdown(); }, 1000);
+        function getCountdown() {
+            var current_date = new Date().getTime();
+            var seconds_left = (target_date - current_date) / 1000;
+
+            minutes = pad(parseInt(seconds_left / 60));
+            seconds = pad(parseInt(seconds_left % 60));
+            countdown.innerHTML = "<span>" + minutes + "</span><span>" + seconds + "</span>";
+            if (seconds_left <= 0) {
+                countdown.innerHTML = "<span>00</span><span>00</span>";
+            }
+        }
+        function pad(n) {
+            return (n < 10 ? '0' : '') + n;
+        }
+    }
+    main();
+</script>
+{{/if}}
+
+
+
+{{!--
+<div class="center" style="text-align:left">
+</div>
+
+<table class="table table-sm table-hover center" style="width:auto">
+    <thead>
+        <tr>
+            {{#each leagueSettings}}
+            <th scope="col">{{@key}}</th>
+            {{/each}}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {{#each leagueSettings}}
+            <td>{{this}}</td>
+            {{/each}}
+        </tr>
+    </tbody>
+</table>
+
+
+{{#each teams}}
+<h3>{{#each this}} {{@key}} {{this}} {{/each}}</h3>
+{{/each}}
+
+
+
+        
+    <h4>Other Teams</h4>
+    <select class="custom-select custom-select-lg mb-3 center" style="width:auto">
+        <option selected>Select Another Team...</option>
+        {{#each teams}}
+        <option value="{{teamID}}">{{teamName}}</option>
+        {{/each}}
+    </select>
+    <table class="table table-sm table-hover center" style="width:auto">
+        <thead>
+            <tr>
+                <th scope="col">Pick #</th>
+                <th scope="col">Player</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">2</th>
+                <td>FakePlayer2</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>FakePlayer3</td>
+            </tr>
+            {{#each otherTeam.players}}
+            <tr>
+                <th scope="row">{{pick}}</th>
+                <td>{{playername}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+--}}
