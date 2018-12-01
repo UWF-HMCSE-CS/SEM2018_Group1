@@ -76,7 +76,7 @@ app.use('/api',require(__dirname + '/draftroutes.js'));
 //app.use('/', require(__dirname + '/draftroutes.js'));
 app.use('/', function(req,res,next){
 	console.log('test');
-	console.log(req);
+	//console.log(req);
 	require(__dirname + '/routes.js')(req,res,next);
 });
 

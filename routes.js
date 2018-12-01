@@ -5,6 +5,8 @@ let dbcon = require(__dirname + '/lib/mysqlDBMgr.js');
 
 router.get('*', function(req,res,next){
 	if (!req.user) {
+		console.log(req.originalUrl);
+		if(req.originalUrl == '/login') return next();
 		return res.redirect('/login');
 	}else next();
 })
@@ -13,6 +15,7 @@ router.get('/logout', function (req, res) {
     res.redirect('/login');
 });
 router.get('/login', function (req, res) {
+	console.error('hit login route');
     console.log(req.user);
     if (req.user) res.redirect('/');
     else
