@@ -19,7 +19,7 @@
         <div class="col">
             <select class="custom-select custom-select-lg mb-3 center">
                 <option selected>Select a Player...</option>
-                {{#each allPlayers}}
+                {{#each draft.allPlayers}}
                 <option value="{{playerID}}">{{playername}}</option>
                 {{/each}}
             </select>
@@ -63,7 +63,7 @@
                 </tr>
             </thead>
             <tbody>
-                {{#each draftOrder}}
+                {{#each draft.draftOrder}}
                 <tr>
                     <th scope="row">{{pickNum}}</th>
                     <td>{{team.teamName}}</td>

@@ -3,6 +3,33 @@ let router = require('express').Router();
 let request = require("request");
 let dbcon = require(__dirname + '/lib/mysqlDBMgr.js');
 
+router.get('/join', function (req, res) {
+    if (req.user) res.redirect('/');
+    else
+        res.render('signUp', {layout:false});
+});
+router.post('/join', function (req, res) {
+    console.log(req.body);
+    console.log('Username: ' + req.body['user[login]']);
+    let username = req.body['user[login]'];
+    let email = req.body['user[email]'];
+    let password = req.body['user[password]'];
+    dbcon.query('insert into login values(?,AES_ENCRYPT(?,?));', [username, password, require(__dirname + '/credentials.js').loginKey], function (err, rows, cols) {
+        if (!err) {
+            dbcon.query('insert into user values(?,?);', [username, email], function (err2, rows, cols) {
+                if (err2) {
+                    next(err2);
+                }
+            });
+            res.redirect('/login');
+        }else {
+            res.render('signUp', {
+                error: "Username is possibly already in use."
+            });
+        }
+    });
+});
+
 router.get('*', function(req,res,next){
 	if (!req.user) {
 		console.log(req.originalUrl);
@@ -132,32 +159,6 @@ router.get('/login/:next', function (req, res) {
     });
 });
 
-router.get('/join', function (req, res) {
-    if (req.user) res.redirect('/');
-    else
-        res.render('signUp', {layout:false});
-});
-router.post('/join', function (req, res) {
-    console.log(req.body);
-    console.log('Username: ' + req.body['user[login]']);
-    let username = req.body['user[login]'];
-    let email = req.body['user[email]'];
-    let password = req.body['user[password]'];
-    dbcon.query('insert into login values(?,AES_ENCRYPT(?,?));', [username, password, require(__dirname + '/credentials.js').loginKey], function (err, rows, cols) {
-        if (!err) {
-            dbcon.query('insert into user values(?,?);', [username, email], function (err2, rows, cols) {
-                if (err2) {
-                    next(err2);
-                }
-            });
-            res.redirect('/login');
-        }else {
-            res.render('signUp', {
-                error: "Username is possibly already in use."
-            });
-        }
-    });
-});
 
 // If trying to access any page other than join or log in
 // while not logged in, redirect to login page
