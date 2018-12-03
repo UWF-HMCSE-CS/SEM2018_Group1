@@ -94,6 +94,7 @@
             countdown.innerHTML = "<span>" + minutes + "</span><span>" + seconds + "</span>";
             if (seconds_left <= 0) {
                 countdown.innerHTML = "<span>00</span><span>00</span>";
+                document.getElementById('draftForm').submit(); // If time runs out, submit the pick
             }
         }
         function pad(n) {
