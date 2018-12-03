@@ -419,22 +419,40 @@ router.post('/addplayer/:leagueID/:playerID', function (req, res) {
     let league = { id: req.params.leagueID };
     let player = { id: req.params.playerID };
 
-    dbcon.query(`SELECT teamID FROM team WHERE username = ? AND leagueID = ?`, [user.username, league.id], function(err, rows, cols) {
-        if(err) {
-            res.redirect(303, '/myteam/' + league.id);
-        }
-        else {
-            let teamID = rows[0].teamID;
-            dbcon.query(`INSERT INTO player_team (teamID, playerID) VALUES(?,?)`,[teamID, player.id], function(err, rows, cols) {
-                if(err) {
-                    res.redirect(303, '/myteam/' + league.id + '?error=1');
-                }
-                else {
-                    res.redirect(303, '/myteam/' + league.id);
-                }
-            });
-        }
-    });
+    // Make sure player is not owned in league
+    dbcon.query(`SELECT COUNT(*) as count
+        FROM player_team 
+        WHERE playerID = ? 
+        AND teamID IN 
+            (SELECT teamID 
+            FROM team
+            WHERE leagueID = ?);`, [player.id, league.id], function (err, rows, cols) {
+            if (err) {
+                res.redirect(303, '/myteam/' + league.id + '?error=1');
+            }
+            else if(rows[0].count) {
+                res.redirect(303, '/myteam/' + league.id + '?error=playerIsOwned');
+            }
+            else {
+                dbcon.query(`SELECT teamID FROM team WHERE username = ? AND leagueID = ?`, [user.username, league.id], function (err, rows, cols) {
+                    if (err) {
+                        res.redirect(303, '/myteam/' + league.id);
+                    }
+                    else {
+                        let teamID = rows[0].teamID;
+                        dbcon.query(`INSERT INTO player_team (teamID, playerID) VALUES(?,?)`, [teamID, player.id], function (err, rows, cols) {
+                            if (err) {
+                                res.redirect(303, '/myteam/' + league.id + '?error=1');
+                            }
+                            else {
+                                res.redirect(303, '/myteam/' + league.id);
+                            }
+                        });
+                    }
+                });
+            }
+
+        });
 });
 
 // view all players on the user's team
