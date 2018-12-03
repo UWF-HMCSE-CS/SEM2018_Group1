@@ -54,7 +54,12 @@ module.exports = function (options) {
                     return aPlayer.playerID == req.body.draftedPlayer;
                 });
 
+                // Save the pick to the draftData variable
                 draftData[req.params.leagueID].allPicks[req.body.currentPickNum - 1].player = player;
+
+                // Let all players know the pick is in
+                let io = req.app.get('socketio');
+                io.emit('pick');
             }
             res.redirect(303, '/draft/' + req.params.leagueID);
         }

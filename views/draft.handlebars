@@ -18,7 +18,7 @@
 
 <p></p>
 
-<form class="center" action="/draft/{{draft.leagueSettings.leagueID}}" method="post">
+<form id="draftForm" class="center" action="/draft/{{draft.leagueSettings.leagueID}}" method="post">
     <input type="hidden" id="currentPickNum" name="currentPickNum" value="{{currentPick.pickNum}}" />
     <div class="row center" style="width:75%">
         <div class="col">
@@ -34,13 +34,6 @@
                 player, and then click DRAFT</h5>
                 <hr />
 </form>
-
-{{!--
-{{myTeam.username}} === {{currentPick.team.username}}
-{{#each myTeam}}
-{{@key}} {{this}}
-{{/each}}
---}}
 
 <div class="row">
     <div class="column center">
@@ -109,68 +102,7 @@
     }
     main();
 </script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/js/draft.js"></script>
 {{/if}}
-
-
-
-{{!--
-<div class="center" style="text-align:left">
-</div>
-
-<table class="table table-sm table-hover center" style="width:auto">
-    <thead>
-        <tr>
-            {{#each leagueSettings}}
-            <th scope="col">{{@key}}</th>
-            {{/each}}
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            {{#each leagueSettings}}
-            <td>{{this}}</td>
-            {{/each}}
-        </tr>
-    </tbody>
-</table>
-
-
-{{#each teams}}
-<h3>{{#each this}} {{@key}} {{this}} {{/each}}</h3>
-{{/each}}
-
-
-
-
-<h4>Other Teams</h4>
-<select class="custom-select custom-select-lg mb-3 center" style="width:auto">
-    <option selected>Select Another Team...</option>
-    {{#each teams}}
-    <option value="{{teamID}}">{{teamName}}</option>
-    {{/each}}
-</select>
-<table class="table table-sm table-hover center" style="width:auto">
-    <thead>
-        <tr>
-            <th scope="col">Pick #</th>
-            <th scope="col">Player</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">2</th>
-            <td>FakePlayer2</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>FakePlayer3</td>
-        </tr>
-        {{#each otherTeam.players}}
-        <tr>
-            <th scope="row">{{pick}}</th>
-            <td>{{playername}}</td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
---}}
