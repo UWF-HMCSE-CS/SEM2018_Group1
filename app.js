@@ -71,6 +71,14 @@ passport.deserializeUser(function (username, done) {
     });
 });
 
+/* SOCKET TO COMMUNICATE BETWEEN USERS DURING DRAFT */
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+//io.on('connection', function(socket){
+	//do something when a user connects
+//});
+app.set('socketio', io); // can be accessed inside routes at req.app.get('socketio')
+
 app.use(express.static(__dirname + '/public'));
 app.use('/api',require(__dirname + '/draftroutes.js'));
 //app.use('/', require(__dirname + '/draftroutes.js'));
@@ -124,7 +132,7 @@ app.use(function (err, req, res, next) {
 
 
 
-app.listen(app.get('port'), function() {
+http.listen(app.get('port'), function() {
 	console.log('Express started on http://localhost:' + 
 		app.get('port') + 
 		'; press Ctrl-C to terminate.')
