@@ -39,9 +39,8 @@ module.exports = function (options) {
             let myTeam = usersTeam(user.username, draft);
             let currentPick = getCurrentPick(draft);
             if(!currentPick) {
-                //draft is over. add players in the db
-                draftData[req.params.leagueID] = null;
-                return res.render('draft', {error: "End of Draft. Submitting Results..."});
+                //draft is over. show user their team
+                return res.redirect(303, '/myTeam/' + req.params.leagueID);
             }
             let myTurn = (user.username === currentPick.team.username);
             let availablePlayers = getAvailablePlayers(draft);
@@ -57,9 +56,16 @@ module.exports = function (options) {
                 // Save the pick to the draftData variable
                 draftData[req.params.leagueID].allPicks[req.body.currentPickNum - 1].player = player;
 
+                // If draft is over, save it to db
+                if(draftData[req.params.leagueID].allPicks.length == req.body.currentPickNum) {
+                    const saveDraft = await queries.saveDraft(draftData[req.params.leagueID]);
+                    if (!saveDraft) return res.render('draft', { error: "saveDraft query returned null" });
+                    else if (saveDraft.error) return res.render('draft', { error: saveDraft.error });
+                }
+
                 // Let all players know the pick is in
                 let io = req.app.get('socketio');
-                io.emit('pick', draftData[req.params.leagueID].leagueSettings.leagueID);
+                io.emit('pick', req.params.leagueID);
             }
             res.redirect(303, '/draft/' + req.params.leagueID);
         }
