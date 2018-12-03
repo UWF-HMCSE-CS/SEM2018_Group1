@@ -466,7 +466,7 @@ router.get('/myteam/:leagueID', function (req, res) {
 
     let teamName = "asdf";
     let players = [];
-    dbcon.query(`SELECT teamName FROM team WHERE leagueID = ? AND username = ?`,[league.id, user.username], function(err, rows, cols) {
+    dbcon.query(`SELECT teamID, teamName FROM team WHERE leagueID = ? AND username = ?`,[league.id, user.username], function(err, rows, cols) {
         if(err) {
             //console.log('error loading teamName');
             res.render('myteam', {
@@ -477,18 +477,19 @@ router.get('/myteam/:leagueID', function (req, res) {
             });
         }
         else {
-            if(rows && rows[0]) { teamName = rows[0].teamName }
+            let teamID = null;
+            if(rows && rows[0]) { 
+                teamName = rows[0].teamName;
+                teamID = rows[0].teamID;
+            }
 
             dbcon.query(`SELECT playerID, playername
             FROM player
             WHERE playerID IN 
                 (SELECT playerID
                 FROM player_team
-                WHERE teamID IN
-                    (SELECT teamID
-                    FROM team
-                    WHERE username = ?));`, 
-                    [user.username], function (err, rows, cols) {
+                WHERE teamID = ?);`, 
+                    [teamID], function (err, rows, cols) {
                 if(err) {
                     //console.log('error loading myteam');
                     res.render('myteam', {
