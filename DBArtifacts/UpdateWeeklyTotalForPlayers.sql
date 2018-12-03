@@ -1,0 +1,1 @@
+update players as a inner join players as b set a.weeklyTotal = b.stat1 + b.stat2 where a.playerID = b.playerID
