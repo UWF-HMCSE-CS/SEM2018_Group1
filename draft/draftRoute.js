@@ -4,73 +4,111 @@ module.exports = function (options) {
     let dbcon = options.dbcon;
     let queries = require('./draftQueries.js')({ dbcon });
 
+    return {
+        get: async function (req, res, next) {
+            let user = {
+                username: (req.user && req.user.username) ? req.user.username : null
+            };
+            res.locals.username = user.username; // same as passing username to res.render
+
+            // If draft hasn't started, load all of the necessary data and start it
+            if (!draftData[req.params.leagueID]) {
+                const allPlayers = await queries.allPlayers();
+                if (!allPlayers) return res.render('draft', { error: "allPlayers query returned null" });
+                else if (allPlayers.error) return res.render('draft', { error: allPlayers.error });
+                else {
+                    const leagueSettings = await queries.leagueSettings(req.params.leagueID);
+                    if (!leagueSettings) return res.render('draft', { error: "leagueSettings query returned null" });
+                    else if (leagueSettings.error) return res.render('draft', { error: leagueSettings.error });
+                    else {
+                        const teams = await queries.teams(req.params.leagueID);
+                        if (!teams) return res.render('draft', { error: "teams query returned null" });
+                        else if (teams.error) return res.render('draft', { error: teams.error });
+                        else {
+                            // all data loaded from DB - generate order and save draft for when other users join
+                            const allPicks = generateSnakeDraftOrder(teams, leagueSettings.players_per_team);
+                            draftData[req.params.leagueID] = { allPlayers, leagueSettings, teams, allPicks };
+                        }
+                    }
+                }
+            }
+
+            const draft = draftData[req.params.leagueID];
+
+            // Once draft is loaded, get user-specific data and current pick
+            let myTeam = usersTeam(user.username, draft);
+            let currentPick = getCurrentPick(draft);
+            if(!currentPick) {
+                //draft is over. add players in the db
+                draftData[req.params.leagueID] = null;
+                return res.render('draft', {error: "End of Draft. Submitting Results..."});
+            }
+            let myTurn = (user.username === currentPick.team.username);
+            let availablePlayers = getAvailablePlayers(draft);
+            res.render('draft', { draft, myTeam, currentPick, myTurn, availablePlayers });
+        },
+
+        post: async function (req, res, next) {
+            if (draftData[req.params.leagueID] && req.body && req.body.draftedPlayer && req.body.currentPickNum) {
+                let player = draftData[req.params.leagueID].allPlayers.find(function(aPlayer) {
+                    return aPlayer.playerID == req.body.draftedPlayer;
+                });
+
+                draftData[req.params.leagueID].allPicks[req.body.currentPickNum - 1].player = player;
+            }
+            res.redirect(303, '/draft/' + req.params.leagueID);
+        }
+    }
+
+    /* Helper functions */
     // Generate the draft order given the list of teams and the number of rounds.
-    // Draft order will be an array of objects with pickNum, team, and player properties
+    // allPicks will be an array of objects with pickNum, team, 
+    // and player properties (players added when players are picked)
     function generateSnakeDraftOrder(teams, rounds) {
-        let draftOrder = [];
+        let allPicks = [];
         let pickNum = 1;
         for (let i = 1; i <= rounds; i++) {
             if (i % 2 === 1) {
                 for (let j = 0; j < teams.length; j++) {
-                    draftOrder.push({ pickNum, team: teams[j] });
+                    allPicks.push({ pickNum, team: teams[j] });
                     pickNum++;
                 }
             }
             else {
                 for (let j = teams.length - 1; j >= 0; j--) {
-                    draftOrder.push({ pickNum, team: teams[j] });
+                    allPicks.push({ pickNum, team: teams[j] });
                     pickNum++;
                 }
             }
         }
-        return draftOrder;
+        return allPicks;
     }
 
     // Return the picks specifically for the user
-    function usersTeam(username, draftOrder) {
-        let myTeam = {};
-        myTeam.picks = draftOrder.filter(function (pick) {
+    function usersTeam(username, draft) {
+        let myTeam = draft.teams.find(function (team) {
+            return team.username === username;
+        });
+        myTeam.picks = draft.allPicks.filter(function (pick) {
             return pick.team.username === username;
         });
-        myTeam.teamName = myTeam.picks[0].team.teamName;
         return myTeam;
     }
 
-    return async function (req, res, next) {
-        let user = {
-            username: (req.user && req.user.username) ? req.user.username : null
-        };
-        res.locals.username = user.username; // same as passing username to res.render
-
-        // If the draft is already in progress, load the data 
-        if (draftData[req.params.leagueID]) {
-            let myTeam = usersTeam(user.username, draftData[req.params.leagueID].draftOrder);
-            return res.render('draft', { draft: draftData[req.params.leagueID], myTeam });
+    function getCurrentPick(draft) {
+        for (let i = 0; i < draft.allPicks.length; i++) {
+            if (!draft.allPicks[i].player) return draft.allPicks[i];
         }
+    }
 
-        // If draft hasn't started, load all of the necessary data and start it
-        const allPlayers = await queries.allPlayers();
-        if (!allPlayers) res.render('draft', { error: "allPlayers query returned null" });
-        else if (allPlayers.error) res.render('draft', { error: allPlayers.error });
-        else {
-            const leagueSettings = await queries.leagueSettings(req.params.leagueID);
-            if (!leagueSettings) res.render('draft', { error: "leagueSettings query returned null" });
-            else if (leagueSettings.error) res.render('draft', { error: leagueSettings.error });
-            else {
-                const teams = await queries.teams(req.params.leagueID);
-                if (!teams) res.render('draft', { error: "teams query returned null" });
-                else if (teams.error) res.render('draft', { error: teams.error });
-                else {
-                    // all data loaded from DB - generate order, load user's team, and save draft for when other users join
-                    const draftOrder = generateSnakeDraftOrder(teams, leagueSettings.players_per_team);
-
-                    let myTeam = usersTeam(user.username, draftOrder);
-
-                    draftData[req.params.leagueID] = { allPlayers, leagueSettings, teams, draftOrder };
-
-                    res.render('draft', { draft: draftData[req.params.leagueID], myTeam });
-                }
-            }
-        }
+    function getAvailablePlayers(draft) {
+        let allPlayers = draft.allPlayers;
+        let allPicks = draft.allPicks;
+        return allPlayers.filter(function(player) {
+            if(allPicks.find(function(pick) {
+                if(pick.player) return pick.player.playerID == player.playerID;
+            })) return false;
+            else return true;
+        });
     }
 }
