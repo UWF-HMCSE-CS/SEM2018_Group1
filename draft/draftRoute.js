@@ -59,7 +59,7 @@ module.exports = function (options) {
 
                 // Let all players know the pick is in
                 let io = req.app.get('socketio');
-                io.emit('pick');
+                io.emit('pick', draftData[req.params.leagueID].leagueSettings.leagueID);
             }
             res.redirect(303, '/draft/' + req.params.leagueID);
         }

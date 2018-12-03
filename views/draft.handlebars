@@ -20,6 +20,7 @@
 
 <form id="draftForm" class="center" action="/draft/{{draft.leagueSettings.leagueID}}" method="post">
     <input type="hidden" id="currentPickNum" name="currentPickNum" value="{{currentPick.pickNum}}" />
+    <input type="hidden" id="leagueID" name="leagueID" value="{{draft.leagueSettings.leagueID}}" />
     <div class="row center" style="width:75%">
         <div class="col">
             <select class="custom-select custom-select-lg mb-3 center" id="draftedPlayer" name="draftedPlayer">
@@ -80,7 +81,7 @@
 
 <script>
     function main() {
-        var target_date = new Date().getTime() + (1000 * 60); // set the countdown date
+        var target_date = new Date().getTime() + (1000 * 30); // set the countdown date
         var minutes, seconds; // variables for time units
         var countdown = document.getElementById("tiles"); // get tag element
         if (getCountdown() == 0) return;
