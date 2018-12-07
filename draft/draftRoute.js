@@ -40,8 +40,9 @@ module.exports = function (options) {
 
             const draft = draftData[req.params.leagueID];
             if(draft.finished) {
-                //draft is over. show user their team
-                return res.redirect(303, '/myTeam/' + req.params.leagueID);
+                //draft is over. show draft results
+                let league = { id : req.params.leagueID };
+                return res.render('draftResults', {draft, league});
             }
 
             // Once draft is loaded, get user-specific data and current pick
