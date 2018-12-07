@@ -13,13 +13,18 @@ module.exports = function (options) {
 
             // If draft hasn't started, load all of the necessary data and start it
             if (!draftData[req.params.leagueID]) {
-                const allPlayers = await queries.allPlayers();
-                if (!allPlayers) return res.render('draft', { error: "allPlayers query returned null" });
-                else if (allPlayers.error) return res.render('draft', { error: allPlayers.error });
+                const leagueSettings = await queries.leagueSettings(req.params.leagueID);
+                if (!leagueSettings) return res.render('draft', { error: "leagueSettings query returned null" });
+                else if (leagueSettings.error) return res.render('draft', { error: leagueSettings.error });
+                else if (leagueSettings.ownerID != user.username) {
+                    return res.render('draft', { 
+                        error: 'The draft has not yet started. Only the league owner, ' +  leagueSettings.ownerID + ', can begin the draft.'
+                    });
+                }
                 else {
-                    const leagueSettings = await queries.leagueSettings(req.params.leagueID);
-                    if (!leagueSettings) return res.render('draft', { error: "leagueSettings query returned null" });
-                    else if (leagueSettings.error) return res.render('draft', { error: leagueSettings.error });
+                    const allPlayers = await queries.allPlayers();
+                    if (!allPlayers) return res.render('draft', { error: "allPlayers query returned null" });
+                    else if (allPlayers.error) return res.render('draft', { error: allPlayers.error });
                     else {
                         const teams = await queries.teams(req.params.leagueID);
                         if (!teams) return res.render('draft', { error: "teams query returned null" });
@@ -34,20 +39,20 @@ module.exports = function (options) {
             }
 
             const draft = draftData[req.params.leagueID];
+            if(draft.finished) {
+                //draft is over. show user their team
+                return res.redirect(303, '/myTeam/' + req.params.leagueID);
+            }
 
             // Once draft is loaded, get user-specific data and current pick
             let myTeam = usersTeam(user.username, draft);
             let currentPick = getCurrentPick(draft);
-            if(!currentPick) {
-                //draft is over. show user their team
-                return res.redirect(303, '/myTeam/' + req.params.leagueID);
-            }
             let myTurn = (user.username === currentPick.team.username);
             let availablePlayers = getAvailablePlayers(draft);
             res.render('draft', { draft, myTeam, currentPick, myTurn, availablePlayers });
         },
 
-        post: async function (req, res, next) {
+        post: async function (req, res, next) { // When a pick is made
             if (draftData[req.params.leagueID] && req.body && req.body.draftedPlayer && req.body.currentPickNum) {
                 let player = draftData[req.params.leagueID].allPlayers.find(function(aPlayer) {
                     return aPlayer.playerID == req.body.draftedPlayer;
@@ -56,11 +61,12 @@ module.exports = function (options) {
                 // Save the pick to the draftData variable
                 draftData[req.params.leagueID].allPicks[req.body.currentPickNum - 1].player = player;
 
-                // If draft is over, save it to db
+                // If draft is over, save it to db and set it finished in server variable
                 if(draftData[req.params.leagueID].allPicks.length == req.body.currentPickNum) {
                     const saveDraft = await queries.saveDraft(draftData[req.params.leagueID]);
                     if (!saveDraft) return res.render('draft', { error: "saveDraft query returned null" });
                     else if (saveDraft.error) return res.render('draft', { error: saveDraft.error });
+                    draftData[req.params.leagueID].finished = true;
                 }
 
                 // Let all players know the pick is in
