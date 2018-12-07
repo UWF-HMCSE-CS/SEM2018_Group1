@@ -1,9 +1,13 @@
+{{#if leagueHasNotDrafted}}
+<h4 class="center">This league has not yet drafted. You cannot add players until the draft has occurred.</h4>
+<hr/>
+{{/if}}
 <div class = "w-75 p-3" style="margin:0 auto">
     <div class="card" id="card1">
         <h5 class="card-header">Free Agents</h5>
         <div class="card-body">
             {{#each players}}
-            <a href="/addplayer/{{../league.id}}/{{playerID}}" class="list-group-item list-group-item-action">{{playername}}</a>
+            <a href={{#if ../leagueHasNotDrafted}}"#"{{else}}"/addplayer/{{../league.id}}/{{playerID}}"{{/if}} class="list-group-item list-group-item-action">{{playername}}</a>
             {{else}}
             <h5>There are not currently any free agents</h5>
             {{/each}}

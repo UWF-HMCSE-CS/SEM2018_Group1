@@ -365,11 +365,38 @@ router.get('/players/:leagueID', function (req, res) {
             }
             //console.log(players);
 
-            res.render('players', {
-                username: user.username,
-                league: league,
-                players: players
-            });
+            // If there are no players on any team, the league has not yet drafted
+            // Do not allow users to add players unless the league has already drafted
+            dbcon.query(`SELECT COUNT(*) AS count 
+            FROM player_team 
+            WHERE teamID IN 
+                (SELECT teamID 
+                FROM team
+                WHERE leagueID = ?);`, [league.id], function(err, rows, cols) {
+                    if(err) {
+                        //console.log('error counting players owned in league');
+                        res.render('players', {
+                            username: user.username,
+                            league: league,
+                            players: players
+                        });
+                    }
+                    else if(!rows[0].count) {
+                        res.render('players', {
+                            username: user.username,
+                            league: league,
+                            players: players,
+                            leagueHasNotDrafted: true
+                        });
+                    }
+                    else {
+                        res.render('players', {
+                            username: user.username,
+                            league: league,
+                            players: players
+                        });
+                    }
+                });
         }           
     });
 });
