@@ -83,6 +83,9 @@ module.exports = function (options) {
     // allPicks will be an array of objects with pickNum, team, 
     // and player properties (players added when players are picked)
     function generateSnakeDraftOrder(teams, rounds) {
+        // randomize team order
+        shuffle(teams);
+
         let allPicks = [];
         let pickNum = 1;
         for (let i = 1; i <= rounds; i++) {
@@ -100,6 +103,25 @@ module.exports = function (options) {
             }
         }
         return allPicks;
+    }
+    
+    // Shuffle order of teams
+    function shuffle(array) {
+        let currentIndex = array.length, temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
     }
 
     // Return the picks specifically for the user
