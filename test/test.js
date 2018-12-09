@@ -424,3 +424,158 @@ describe('mySQLDBMgr', function(){
 		});
 	});
 });
+
+/* DRAFT TESTING */
+let mockUser = { username: 'user1' };
+
+let mockPlayers = [];
+for(let i =0 ; i < 4 ; i++) {
+	mockPlayers.push({ playerID: i, playername: 'player' + i });
+}
+
+let mockLeague = { 
+	leagueID: 999, 
+	leagueOwner: mockUser.username, 
+	leagueName: 'name', 
+	players_per_team: 2 
+};
+
+let mockTeams = [];
+mockTeams.push({
+	teamID : 1,
+	leagueID: mockLeague.leagueID,
+	username: mockUser.username,
+	teamName: 'team1'
+});
+mockTeams.push({
+	teamID : 2,
+	leagueID: mockLeague.leagueID,
+	username: 'user2',
+	teamName: 'team2'
+});
+
+let mockDraft = {
+	allPlayers: mockPlayers,
+	leagueSettings: mockLeague,
+	teams: mockTeams,
+	allPicks: [] // to be tested
+};
+
+let helpers = require('../draft/draftHelpers.js');
+describe('draft', function(){
+	let teams = mockDraft.teams;
+	let rounds = mockDraft.leagueSettings.players_per_team;
+	describe('helpers: shuffle', function()
+	{
+		let testTeams = helpers.shuffle(teams);
+
+		it('returns a list of the same length', function(done)
+		{
+			assert.equal(teams.length , testTeams.length);
+			done();
+		});
+	});
+
+	describe('helpers: generateSnakeDraftOrder', function()
+	{
+		mockDraft.allPicks = helpers.generateSnakeDraftOrder(teams, rounds);
+
+		it('total picks = rounds * number of teams', function(done)
+		{
+			assert.equal(mockDraft.allPicks.length , (rounds * teams.length) );
+			done();
+		});
+		it('has a snaked order', function(done)
+		{
+			// 1 2 2 1 (using 2 teams)
+			assert.equal(mockDraft.allPicks[0].team , mockDraft.allPicks[3].team);
+			assert.equal(mockDraft.allPicks[1].team , mockDraft.allPicks[2].team);
+			done();
+		});
+	});
+	
+	describe('helpers: usersTeam', function()
+	{
+		let mockUsersTeam = teams.find(function(team) {
+			return team.username === mockUser.username;
+		});
+		let testTeam = helpers.usersTeam(mockUser.username, mockDraft);
+
+		it('returns the users team settings', function(done)
+		{
+			assert.equal(mockUsersTeam.teamID, testTeam.teamID);
+			assert.equal(mockUsersTeam.username, testTeam.username);
+			assert.equal(mockUsersTeam.teamName, testTeam.teamName);
+			done();
+		});
+		it('returns the picks that belong to the user', function(done)
+		{
+			for(let i = 0 ; i < testTeam.picks.length ; i++ ) {
+				assert.equal(mockUser.username, testTeam.picks[i].team.username);
+			}
+			done();
+		});
+	});
+	
+	describe('helpers: getCurrentPick', function()
+	{
+		let testPick = helpers.getCurrentPick(mockDraft);
+
+		it('returns the first pick before any picks are made', function(done)
+		{
+			assert.equal(mockDraft.allPicks[0], testPick);
+			done();
+		});
+
+		it('returns the next pick after picks are made', function(done)
+		{
+			for(let i = 0 ; i < mockDraft.allPicks.length ; i++) {
+				mockDraft.allPicks[i].player = mockDraft.allPlayers[i];
+				testPick = helpers.getCurrentPick(mockDraft);
+	
+				assert.equal(mockDraft.allPicks[i+1], testPick);
+			}
+			done();
+		});
+
+		it('returns null on the last pick', function(done)
+		{
+			for(let i = 0 ; i < mockDraft.allPicks.length ; i++) {
+				mockDraft.allPicks[i].player = mockDraft.allPlayers[i];
+				testPick = helpers.getCurrentPick(mockDraft);
+	
+				if(i == mockDraft.allPicks.length) assert.ok(!testPick);
+			}
+			done();
+		});
+	});
+	
+	describe('helpers: getAvailablePlayers', function()
+	{
+		let testPlayers = helpers.getAvailablePlayers(mockDraft);
+
+		it('returns allPlayers before any picks are made', function(done)
+		{
+			for(let i = 0 ; i < mockDraft.allPlayers.length ; i ++) {
+				assert.equal(mockDraft.allPlayers[i], testPlayers[i]);
+			}
+			done();
+		});
+
+		it('returns only available players after picks are made', function(done)
+		{
+			for(let i = 0 ; i < mockDraft.allPicks.length ; i++) {
+				mockDraft.allPicks[i].player = null;
+			}
+			for(let i = 0 ; i < mockDraft.allPicks.length ; i++) {
+				mockDraft.allPicks[i].player = mockDraft.allPlayers[i];
+				testPlayers = helpers.getAvailablePlayers(mockDraft);
+	
+				for(let j = i; j < mockDraft.allPlayers.length ; j++) {
+					assert.equal(mockDraft.allPlayers[j+1], testPlayers[j-i]);
+				}
+			}
+			done();
+		});
+	});
+});

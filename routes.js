@@ -324,6 +324,7 @@ router.post('/createTeam/:leagueID', function (req, res) {
 
 router.get('/draft/:leagueID', require('./draft/draftRoute.js')({ dbcon :dbcon }).get);
 router.post('/draft/:leagueID', require('./draft/draftRoute.js')({ dbcon :dbcon }).post);
+router.post('/startDraft/:leagueID', require('./draft/draftRoute.js')({ dbcon :dbcon }).startDraft);
 
 // view all players that are "free agents" - not owned by any team in the league
 router.get('/players/:leagueID', function (req, res) {
@@ -368,7 +369,7 @@ router.get('/players/:leagueID', function (req, res) {
             // If there are no players on any team, the league has not yet drafted
             // Do not allow users to add players unless the league has already drafted
             dbcon.query(`SELECT COUNT(*) AS count 
-            FROM player_team 
+            FROM draft
             WHERE teamID IN 
                 (SELECT teamID 
                 FROM team
