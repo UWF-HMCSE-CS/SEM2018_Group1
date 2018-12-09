@@ -14,6 +14,15 @@ module.exports = function (options) {
 
             // If draft hasn't started, load all of the necessary data and start it
             if (!draftData[req.params.leagueID]) {
+                const draftResults = await queries.draftResults(req.params.leagueID);
+                if (draftResults !== 0) { // If the league has already drafted
+                    if (!draftResults) return res.render('draft', { error: "draftResults query returned null" });
+                    else if (draftResults.error) return res.render('draft', { error: draftResults.error });
+
+                    let league = { id : req.params.leagueID };
+                    return res.render('draftResults', {draftResults, league});
+                }
+
                 const leagueSettings = await queries.leagueSettings(req.params.leagueID);
                 if (!leagueSettings) return res.render('draft', { error: "leagueSettings query returned null" });
                 else if (leagueSettings.error) return res.render('draft', { error: leagueSettings.error });
@@ -22,7 +31,7 @@ module.exports = function (options) {
                         error: 'The draft has not yet started. Only the league owner, ' + leagueSettings.ownerID + ', can begin the draft.'
                     });
                 }
-                
+
                 const allPlayers = await queries.allPlayers();
                 if (!allPlayers) return res.render('draft', { error: "allPlayers query returned null" });
                 else if (allPlayers.error) return res.render('draft', { error: allPlayers.error });
@@ -38,11 +47,6 @@ module.exports = function (options) {
             }
 
             const draft = draftData[req.params.leagueID];
-            if(draft.finished) {
-                //draft is over. show draft results
-                let league = { id : req.params.leagueID };
-                return res.render('draftResults', {draft, league});
-            }
 
             // Once draft is loaded, get user-specific data and current pick
             let myTeam = helpers.usersTeam(user.username, draft);
@@ -61,12 +65,12 @@ module.exports = function (options) {
                 // Save the pick to the draftData variable
                 draftData[req.params.leagueID].allPicks[req.body.currentPickNum - 1].player = player;
 
-                // If draft is over, save it to db and set it finished in server variable
+                // If draft is over, save it to db and set server variable to null
                 if(draftData[req.params.leagueID].allPicks.length == req.body.currentPickNum) {
                     const saveDraft = await queries.saveDraft(draftData[req.params.leagueID]);
                     if (!saveDraft) return res.render('draft', { error: "saveDraft query returned null" });
                     else if (saveDraft.error) return res.render('draft', { error: saveDraft.error });
-                    draftData[req.params.leagueID].finished = true;
+                    draftData[req.params.leagueID] = null;
                 }
 
                 // Let all players know the pick is in

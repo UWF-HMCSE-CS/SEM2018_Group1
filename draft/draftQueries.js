@@ -57,18 +57,52 @@ module.exports = function (options) {
             let deleteStatement = 'DELETE FROM player_team WHERE teamID IN (SELECT teamID FROM team WHERE leagueID = ?)';
             let leagueID = draft.leagueSettings.leagueID;
 
+            // Set teams in player_team, results saved separately in draft table
             let insertStatement = 'INSERT INTO player_team (teamID, playerID) VALUES ';
+            let draftInsertStatement = 'INSERT INTO draft (pickNum, teamID, playerID) VALUES ';
             for(let i = 0; i < draft.allPicks.length; i++) {
+                let pickNum = draft.allPicks[i].pickNum;
                 let teamID = draft.allPicks[i].team.teamID;
                 let playerID = draft.allPicks[i].player.playerID;
                 // Add values for each draft pick
                 insertStatement += '(' + teamID + ', ' + playerID + ')';
-                if(i < draft.allPicks.length - 1) insertStatement += ',';
+                draftInsertStatement += '(' + pickNum + ', ' + teamID + ', ' + playerID + ')';
+                if(i < draft.allPicks.length - 1) {
+                    insertStatement += ',';
+                    draftInsertStatement += ',';
+                }
             }
             return await query(deleteStatement, [leagueID]).then(async function () {
-                return await query(insertStatement).then(function () { return true; }).catch(function (err) {
+                return await query(insertStatement).then(async function () { 
+                    return await query(draftInsertStatement).then(function() { 
+                        return true; 
+                    }).catch(function (err) {
+                        return { error: err.message };
+                    }); 
+                }).catch(function (err) {
                     return { error: err.message };
                 });
+            }).catch(function (err) {
+                return { error: err.message };
+            });
+        },
+
+        // return saved draft results, or 0 if there are none
+        draftResults: async function(leagueID) {
+            let selectStatement = `SELECT draft.pickNum as pickNum, team.teamName as teamName, player.playerName as playerName
+            FROM draft
+            INNER JOIN team ON draft.teamID = team.teamID
+            INNER JOIN player ON draft.playerID = player.playerID
+            WHERE draft.teamID IN 
+            (SELECT teamID 
+            FROM team
+            WHERE leagueID = ?) 
+            ORDER BY pickNum;`;
+
+            return await query(selectStatement, [leagueID]).then(function (rows, cols) {
+                if(!rows[0]) return 0; // if no results
+
+                return rows;
             }).catch(function (err) {
                 return { error: err.message };
             });
