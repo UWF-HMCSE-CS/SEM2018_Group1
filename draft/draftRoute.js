@@ -11,6 +11,7 @@ module.exports = function (options) {
                 username: (req.user && req.user.username) ? req.user.username : null
             };
             res.locals.username = user.username; // same as passing username to res.render
+            res.locals.league = { id : req.params.leagueID };
 
             // If draft hasn't started, load all of the necessary data and start it
             if (!draftData[req.params.leagueID]) {
@@ -19,8 +20,7 @@ module.exports = function (options) {
                     if (!draftResults) return res.render('draft', { error: "draftResults query returned null" });
                     else if (draftResults.error) return res.render('draft', { error: draftResults.error });
 
-                    let league = { id : req.params.leagueID };
-                    return res.render('draftResults', {draftResults, league});
+                    return res.render('draftResults', { draftResults });
                 }
 
                 const leagueSettings = await queries.leagueSettings(req.params.leagueID);
