@@ -368,7 +368,7 @@ router.get('/players/:leagueID', function (req, res) {
             // If there are no players on any team, the league has not yet drafted
             // Do not allow users to add players unless the league has already drafted
             dbcon.query(`SELECT COUNT(*) AS count 
-            FROM player_team 
+            FROM draft
             WHERE teamID IN 
                 (SELECT teamID 
                 FROM team
