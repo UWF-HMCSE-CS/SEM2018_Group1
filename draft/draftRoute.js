@@ -3,6 +3,7 @@ let draftData = {}; // Will store data for a league's draft under the leagueID {
 module.exports = function (options) {
     let dbcon = options.dbcon;
     let queries = require('./draftQueries.js')({ dbcon });
+    let helpers = require('./draftHelpers.js');
 
     return {
         get: async function (req, res, next) {
@@ -17,25 +18,23 @@ module.exports = function (options) {
                 if (!leagueSettings) return res.render('draft', { error: "leagueSettings query returned null" });
                 else if (leagueSettings.error) return res.render('draft', { error: leagueSettings.error });
                 else if (leagueSettings.ownerID != user.username) {
-                    return res.render('draft', { 
-                        error: 'The draft has not yet started. Only the league owner, ' +  leagueSettings.ownerID + ', can begin the draft.'
+                    return res.render('draft', {
+                        error: 'The draft has not yet started. Only the league owner, ' + leagueSettings.ownerID + ', can begin the draft.'
                     });
                 }
-                else {
-                    const allPlayers = await queries.allPlayers();
-                    if (!allPlayers) return res.render('draft', { error: "allPlayers query returned null" });
-                    else if (allPlayers.error) return res.render('draft', { error: allPlayers.error });
-                    else {
-                        const teams = await queries.teams(req.params.leagueID);
-                        if (!teams) return res.render('draft', { error: "teams query returned null" });
-                        else if (teams.error) return res.render('draft', { error: teams.error });
-                        else {
-                            // all data loaded from DB - generate order and save draft for when other users join
-                            const allPicks = generateSnakeDraftOrder(teams, leagueSettings.players_per_team);
-                            draftData[req.params.leagueID] = { allPlayers, leagueSettings, teams, allPicks };
-                        }
-                    }
-                }
+                
+                const allPlayers = await queries.allPlayers();
+                if (!allPlayers) return res.render('draft', { error: "allPlayers query returned null" });
+                else if (allPlayers.error) return res.render('draft', { error: allPlayers.error });
+
+                const teams = await queries.teams(req.params.leagueID);
+                if (!teams) return res.render('draft', { error: "teams query returned null" });
+                else if (teams.error) return res.render('draft', { error: teams.error });
+
+                // all data loaded from DB - generate order and save draft for when other users join
+                helpers.shuffle(teams);
+                const allPicks = helpers.generateSnakeDraftOrder(teams, leagueSettings.players_per_team);
+                draftData[req.params.leagueID] = { allPlayers, leagueSettings, teams, allPicks };
             }
 
             const draft = draftData[req.params.leagueID];
@@ -46,10 +45,10 @@ module.exports = function (options) {
             }
 
             // Once draft is loaded, get user-specific data and current pick
-            let myTeam = usersTeam(user.username, draft);
-            let currentPick = getCurrentPick(draft);
+            let myTeam = helpers.usersTeam(user.username, draft);
+            let currentPick = helpers.getCurrentPick(draft);
             let myTurn = (user.username === currentPick.team.username);
-            let availablePlayers = getAvailablePlayers(draft);
+            let availablePlayers = helpers.getAvailablePlayers(draft);
             res.render('draft', { draft, myTeam, currentPick, myTurn, availablePlayers });
         },
 
@@ -76,79 +75,5 @@ module.exports = function (options) {
             }
             res.redirect(303, '/draft/' + req.params.leagueID);
         }
-    }
-
-    /* Helper functions */
-    // Generate the draft order given the list of teams and the number of rounds.
-    // allPicks will be an array of objects with pickNum, team, 
-    // and player properties (players added when players are picked)
-    function generateSnakeDraftOrder(teams, rounds) {
-        // randomize team order
-        shuffle(teams);
-
-        let allPicks = [];
-        let pickNum = 1;
-        for (let i = 1; i <= rounds; i++) {
-            if (i % 2 === 1) {
-                for (let j = 0; j < teams.length; j++) {
-                    allPicks.push({ pickNum, team: teams[j] });
-                    pickNum++;
-                }
-            }
-            else {
-                for (let j = teams.length - 1; j >= 0; j--) {
-                    allPicks.push({ pickNum, team: teams[j] });
-                    pickNum++;
-                }
-            }
-        }
-        return allPicks;
-    }
-    
-    // Shuffle order of teams
-    function shuffle(array) {
-        let currentIndex = array.length, temporaryValue, randomIndex;
-
-        // While there remain elements to shuffle...
-        while (0 !== currentIndex) {
-            // Pick a remaining element...
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-
-            // And swap it with the current element.
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-        }
-
-        return array;
-    }
-
-    // Return the picks specifically for the user
-    function usersTeam(username, draft) {
-        let myTeam = draft.teams.find(function (team) {
-            return team.username === username;
-        });
-        myTeam.picks = draft.allPicks.filter(function (pick) {
-            return pick.team.username === username;
-        });
-        return myTeam;
-    }
-
-    function getCurrentPick(draft) {
-        for (let i = 0; i < draft.allPicks.length; i++) {
-            if (!draft.allPicks[i].player) return draft.allPicks[i];
-        }
-    }
-
-    function getAvailablePlayers(draft) {
-        let allPlayers = draft.allPlayers;
-        let allPicks = draft.allPicks;
-        return allPlayers.filter(function(player) {
-            if(allPicks.find(function(pick) {
-                if(pick.player) return pick.player.playerID == player.playerID;
-            })) return false;
-            else return true;
-        });
     }
 }
