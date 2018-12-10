@@ -1,18 +1,16 @@
-<nav class="navbar navbar-expand-lg ">
-        <a class="navbar-brand" href="#">
-            <img src="invertedLogo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            eSports Fantasy
-          </a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-item nav-link" href="home.html">Home</a>
-            <a class="nav-item nav-link" href="league.html">League</a>
-            <a class="nav-item nav-link" href="team.html">Team</a>
-            <a class="nav-item nav-link" href="#">Players</a>
-            
-          </div>
-          <a class="nav navbar-nav navbar-right">
-            <a href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
-        </a>
+<div class = "w-75 p-3 center" style="margin:0 auto">
+{{#if leagueHasNotDrafted}}
+<h4>This league has not yet drafted. You cannot add players until the draft has occurred.</h4>
+<hr/>
+{{/if}}
+    <div class="card" id="card1">
+        <h5 class="card-header">Free Agents</h5>
+        <div class="card-body">
+            {{#each players}}
+            <a href={{#if ../leagueHasNotDrafted}}"#"{{else}}"/addplayer/{{../league.id}}/{{playerID}}"{{/if}} class="list-group-item list-group-item-action center">{{playername}}</a>
+            {{else}}
+            <h5>There are not currently any free agents</h5>
+            {{/each}}
         </div>
-      </nav>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div class = "w-75 p-3" style="margin:0 auto">
+<table class="table table-hover" align="center" id="leagueDetail">
+    <thead class="thead" id="teamName">
+    <h1 class="text-dark" style="margin:0 auto; text-align:center"><strong>{{league.name}}</strong></h1>
+    
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Team Name</th>
+        <th scope="col">Score</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{#each league.teams}}
+        <tr>
+        <th scope="row">1</th>
+        <td onclick="location.href='#'">{{teamName}}</td>
+        {{!-- when teams are ready: onclick="location.href='/team/{{../league.id}}/{{teamID}}'" --}}
+        <td>-</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</div>
+<a href="/invite/{{league.id}}" class="btn btn-primary" id="inviteButton">Invite a Friend</a>

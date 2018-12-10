@@ -1,0 +1,112 @@
+{{#if error}}
+<div class = "w-75 p-3 center" style="margin:0 auto">
+    <h4>{{error}}</h4>
+</div>
+{{else}}
+<div id="draft" class="center">
+
+    <div {{#if myTurn}} class="p-3 mb-2 bg-danger" {{else}} class="p-3 mb-2 bg-white" {{/if}}>
+        <h1 id="draftHeader">ON THE CLOCK: {{currentPick.team.teamName}} ({{currentPick.team.username}})</h1>
+    </div>
+    <h4 style="color:black">Pick Number {{currentPick.pickNum}}</h4>
+    <div id="countdown">
+        <div id='tiles'></div>
+        <div class="labels">
+            <li>Mins</li>
+            <li>Secs</li>
+        </div>
+    </div>
+</div>
+
+<p></p>
+
+<form id="draftForm" class="center" action="/draft/{{draft.leagueSettings.leagueID}}" method="post">
+    <input type="hidden" id="currentPickNum" name="currentPickNum" value="{{currentPick.pickNum}}" />
+    <input type="hidden" id="leagueID" name="leagueID" value="{{draft.leagueSettings.leagueID}}" />
+    <div class="row center" style="width:75%">
+        <div class="col">
+            <select class="custom-select custom-select-lg mb-3 center" id="draftedPlayer" name="draftedPlayer">
+                {{#each availablePlayers}}
+                <option value="{{playerID}}">{{playername}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col" style="text-align: left">
+            <button style="width:100%" type="submit" class="btn btn-primary mb-2" {{#if myTurn}} {{else}} disabled{{/if}}>DRAFT
+                </button> </div> </div> <h5>When you are on the clock, select an available
+                player, and then click DRAFT</h5>
+                <hr />
+</form>
+
+<div class="row">
+    <div class="column center">
+        <h4>My Team - "{{myTeam.teamName}}"</h4>
+        <table class="table table-hover center" style="width:auto">
+            <thead>
+                <tr class="table-primary">
+                    <th class="center" scope="col">Pick #</th>
+                    <th class="center" scope="col">Player</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each myTeam.picks}}
+                <tr>
+                    <th scope="row">{{pickNum}}</th>
+                    <td>{{player.playername}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div class="column center">
+        <h5>All Draft Picks</h5>
+        <table class="table table-sm table-hover center" style="width:auto">
+            <thead>
+                <tr class="table-secondary">
+                <th class="center" scope="col">Pick #</th>
+                <th class="center" scope="col">Team</th>
+                <th class="center" scope="col">Player</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each draft.allPicks}}
+                <tr>
+                    <th scope="row">{{pickNum}}</th>
+                    <td>{{team.teamName}}</td>
+                    <td>{{player.playername}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function main() {
+        var target_date = new Date().getTime() + (1000 * 30); // set the countdown date
+        var minutes, seconds; // variables for time units
+        var countdown = document.getElementById("tiles"); // get tag element
+        if (getCountdown() == 0) return;
+        setInterval(function () { getCountdown(); }, 1000);
+        function getCountdown() {
+            var current_date = new Date().getTime();
+            var seconds_left = (target_date - current_date) / 1000;
+
+            minutes = pad(parseInt(seconds_left / 60));
+            seconds = pad(parseInt(seconds_left % 60));
+            countdown.innerHTML = "<span>" + minutes + "</span><span>" + seconds + "</span>";
+            if (seconds_left <= 0) {
+                countdown.innerHTML = "<span>00</span><span>00</span>";
+                document.getElementById('draftForm').submit(); // If time runs out, submit the pick
+            }
+        }
+        function pad(n) {
+            return (n < 10 ? '0' : '') + n;
+        }
+    }
+    main();
+</script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/js/draft.js"></script>
+{{/if}}

@@ -1,0 +1,22 @@
+<div class="center">
+    <h2>Draft Complete</h2>
+    <hr />
+    <table class="table table-sm table-hover center" style="width:auto">
+        <thead>
+            <tr class="table-secondary">
+                <th class="center" scope="col">Pick #</th>
+                <th class="center" scope="col">Team</th>
+                <th class="center" scope="col">Player</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each draftResults}}
+            <tr>
+                <th scope="row">{{pickNum}}</th>
+                <td>{{teamName}}</td>
+                <td>{{playerName}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

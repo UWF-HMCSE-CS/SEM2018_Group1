@@ -34,14 +34,17 @@ let test = function (username, password, done) {
         var loggedInUser;
         console.log("inside passport strat");
         dbcon.query('select * from login where username = ? and password = AES_Encrypt(?,?);',[username,password,require(__dirname + '/credentials.js').loginKey], function(err,rows,cols){
-        	console.log(rows);
+        	console.log('login?: ' + rows);
         	if(!err && rows && rows[0]){
+        		console.log("Success?");
         		return done(null, rows[0]);
         	}else {
+        		console.log("Failure");
+
         		return done(null, false, {message: "Failed to login (Bad Credentials?)"});
         	}
         });
-}
+};
 
 
 /* define local strategy for login here when db protocol known*/
@@ -58,7 +61,7 @@ passport.deserializeUser(function (username, done) {
     dbcon.query('select username, password from login where username = ?;', [username], function(err, rows, cols){
         console.log(rows);
         if (err || !rows || !rows[0]) {
-        	console.log("Failed Login")
+        	console.log("Failed Login");
             return done(null, false, { message: 'Failure... :(' });
         } else {
             loggedInUser = rows[0];
@@ -68,8 +71,24 @@ passport.deserializeUser(function (username, done) {
     });
 });
 
+/* SOCKET TO COMMUNICATE BETWEEN USERS DURING DRAFT */
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+//io.on('connection', function(socket){
+	//do something when a user connects
+//});
+app.set('socketio', io); // can be accessed inside routes at req.app.get('socketio')
+
 app.use(express.static(__dirname + '/public'));
-app.use('/', require(__dirname + '/routes.js'));
+app.use('/api',require(__dirname + '/draftroutes.js'));
+//app.use('/', require(__dirname + '/draftroutes.js'));
+app.use('/', function(req,res,next){
+	console.log('test');
+	//console.log(req);
+	require(__dirname + '/routes.js')(req,res,next);
+});
+
+
 
 app.use(function (req, res, next) {
 	var err = new Error('Not Found');
@@ -113,7 +132,7 @@ app.use(function (err, req, res, next) {
 
 
 
-app.listen(app.get('port'), function() {
+http.listen(app.get('port'), function() {
 	console.log('Express started on http://localhost:' + 
 		app.get('port') + 
 		'; press Ctrl-C to terminate.')
